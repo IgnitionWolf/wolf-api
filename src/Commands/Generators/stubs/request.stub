@@ -1,0 +1,20 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Spatie\Skeleton\Requests\EntityRequest;
+
+abstract class $CLASS$ extends EntityRequest
+{
+    public static $entity;
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [];
+    }
+}

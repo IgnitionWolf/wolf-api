@@ -1,0 +1,10 @@
+<?php
+
+namespace $CLASS_NAMESPACE$;
+
+use Spatie\Skeleton\Controllers\BaseController;
+
+class $CLASS$ extends BaseController
+{
+    //
+}

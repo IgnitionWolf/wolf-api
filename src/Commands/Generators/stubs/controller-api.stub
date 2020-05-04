@@ -1,0 +1,10 @@
+<?php
+
+namespace $CLASS_NAMESPACE$;
+
+use Spatie\Skeleton\Controllers\EntityController;
+
+class $CLASS$ extends EntityController
+{
+    //
+}
