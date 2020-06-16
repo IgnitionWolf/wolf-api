@@ -1,4 +1,4 @@
-# QuickAPI
+# WolfAPI
 
 This package converts your Laravel application to an API; it bundles by default all the necessary features to work as an API service.
 
@@ -7,15 +7,11 @@ This package converts your Laravel application to an API; it bundles by default 
 You can install the package via composer:
 
 ```bash
-composer require spatie/quick-api
+composer require ignitionwolf/wolf-api
 ```
 
 ## Usage
 
-``` php
-$skeleton = new Spatie\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
-```
 
 ## Testing
 

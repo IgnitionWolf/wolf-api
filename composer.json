@@ -1,16 +1,16 @@
 {
-    "name": "mecaurio/quick-api",
+    "name": "IgnitionWolf/wolf-api",
     "description": "",
     "keywords": [
-        "quick-api"
+        "wolf-api"
     ],
-    "homepage": "https://github.com/Mecaurio/quick-api",
+    "homepage": "https://github.com/IgnitionWolf/wolf-api",
     "license": "MIT",
     "authors": [
         {
-            "name": "Mauricio Villalobos",
-            "email": "mecaurio11@gmail.com",
-            "homepage": "https://mauriciov.com",
+            "name": "Ignition Wolf",
+            "email": "hello@ignitionwolf.com",
+            "homepage": "https://ignitionwolf.com",
             "role": "Developer"
         }
     ],
