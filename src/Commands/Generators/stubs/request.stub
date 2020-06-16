@@ -2,7 +2,7 @@
 
 namespace $NAMESPACE$;
 
-use Spatie\Skeleton\Requests\EntityRequest;
+use IgnitionWolf\API\Requests\EntityRequest;
 
 abstract class $CLASS$ extends EntityRequest
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Events;
+namespace IgnitionWolf\API\Events;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;

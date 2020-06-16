@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Services;
+namespace IgnitionWolf\API\Services;
 
 use Exception;
 

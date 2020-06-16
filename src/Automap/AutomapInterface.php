@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Automap;
+namespace IgnitionWolf\API\Automap;
 
 use Illuminate\Database\Eloquent\Model;
 

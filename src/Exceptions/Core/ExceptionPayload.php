@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Exceptions\Core;
+namespace IgnitionWolf\API\Exceptions\Core;
 
 class ExceptionPayload extends \Illuminate\Support\MessageBag
 {

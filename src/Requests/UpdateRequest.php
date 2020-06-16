@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Requests;
+namespace IgnitionWolf\API\Requests;
 
 /**
  * Handles authorization for updating entities requests.

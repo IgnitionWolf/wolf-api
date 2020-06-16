@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Skeleton\Exceptions;
+namespace IgnitionWolf\API\Exceptions;
 
-use Spatie\Skeleton\Exceptions\Core\BaseException;
-use Spatie\Skeleton\Exceptions\Core\ExceptionPayload;
+use IgnitionWolf\API\Exceptions\Core\BaseException;
+use IgnitionWolf\API\Exceptions\Core\ExceptionPayload;
 
 class NotAuthorizedException extends BaseException
 {

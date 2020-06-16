@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Tests;
+namespace IgnitionWolf\API\Tests;
 
 use PHPUnit\Framework\TestCase;
 

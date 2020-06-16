@@ -2,7 +2,7 @@
 
 namespace $CLASS_NAMESPACE$;
 
-use Spatie\Skeleton\Controllers\EntityController;
+use IgnitionWolf\API\Controllers\EntityController;
 
 class $CLASS$ extends EntityController
 {

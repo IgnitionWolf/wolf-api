@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Skeleton\Controllers;
+namespace IgnitionWolf\API\Controllers;
 
-use Spatie\Skeleton\Traits\Bounces;
+use IgnitionWolf\API\Traits\Bounces;
 use Flugg\Responder\Facades\Responder;
 use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
 use Flugg\Responder\Transformers\Transformer;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Automap;
+namespace IgnitionWolf\API\Automap;
 
 /**
  * Make an entity auto-mapable, this allows automatic data assignment upon creation.

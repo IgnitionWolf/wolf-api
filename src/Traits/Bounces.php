@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Traits;
+namespace IgnitionWolf\API\Traits;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 

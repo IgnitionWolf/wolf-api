@@ -1,25 +1,25 @@
 <?php
 
-namespace Spatie\Skeleton\Controllers;
+namespace IgnitionWolf\API\Controllers;
 
-use Spatie\Skeleton\Controllers\BaseController;
-use Spatie\Skeleton\Events\EntityCreated;
+use IgnitionWolf\API\Controllers\BaseController;
+use IgnitionWolf\API\Events\EntityCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-use Spatie\Skeleton\Exceptions\EntityNotFoundException;
-use Spatie\Skeleton\Exceptions\NotAuthorizedException;
-use Spatie\Skeleton\Exceptions\ValidationException;
-use Spatie\Skeleton\Requests\EntityRequest;
+use IgnitionWolf\API\Exceptions\EntityNotFoundException;
+use IgnitionWolf\API\Exceptions\NotAuthorizedException;
+use IgnitionWolf\API\Exceptions\ValidationException;
+use IgnitionWolf\API\Requests\EntityRequest;
 use Flugg\Responder\Transformers\Transformer;
 use ReflectionClass;
-use Spatie\Skeleton\Events\EntityUpdated;
-use Spatie\Skeleton\Requests\CreateRequest;
-use Spatie\Skeleton\Requests\DeleteRequest;
-use Spatie\Skeleton\Requests\ReadRequest;
-use Spatie\Skeleton\Requests\UpdateRequest;
+use IgnitionWolf\API\Events\EntityUpdated;
+use IgnitionWolf\API\Requests\CreateRequest;
+use IgnitionWolf\API\Requests\DeleteRequest;
+use IgnitionWolf\API\Requests\ReadRequest;
+use IgnitionWolf\API\Requests\UpdateRequest;
 
 abstract class EntityController extends BaseController
 {

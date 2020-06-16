@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Skeleton\Requests;
+namespace IgnitionWolf\API\Requests;
 
-use Spatie\Skeleton\Exceptions\ValidationException;
-use Spatie\Skeleton\Traits\Bounces;
+use IgnitionWolf\API\Exceptions\ValidationException;
+use IgnitionWolf\API\Traits\Bounces;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Spatie\Skeleton\Exceptions\NotAuthorizedException;
+use IgnitionWolf\API\Exceptions\NotAuthorizedException;
 
 abstract class EntityRequest extends FormRequest
 {

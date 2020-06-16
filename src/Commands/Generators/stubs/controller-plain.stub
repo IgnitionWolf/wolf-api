@@ -2,7 +2,7 @@
 
 namespace $CLASS_NAMESPACE$;
 
-use Spatie\Skeleton\Controllers\BaseController;
+use IgnitionWolf\API\Controllers\BaseController;
 
 class $CLASS$ extends BaseController
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Spatie\Skeleton;
+namespace IgnitionWolf\API;
 
-use Spatie\Skeleton\Exceptions\Core\ExceptionBridge;
+use IgnitionWolf\API\Exceptions\Core\ExceptionBridge;
 use Illuminate\Support\ServiceProvider;
 
-use Spatie\Skeleton\Exceptions\RouteNotFoundException;
+use IgnitionWolf\API\Exceptions\RouteNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Tymon\JWTAuth\Exceptions\JWTException as OriginalJWTException;
-use Spatie\Skeleton\Exceptions\JWTException as MyJWTException;
+use IgnitionWolf\API\Exceptions\JWTException as MyJWTException;
 
 class ExceptionServiceProvider extends ServiceProvider
 {
@@ -36,7 +36,7 @@ class ExceptionServiceProvider extends ServiceProvider
     {
         $this->app->singleton(
             'Illuminate\Contracts\Debug\ExceptionHandler',
-            'Spatie\Skeleton\Exceptions\Core\Handler'
+            'IgnitionWolf\API\Exceptions\Core\Handler'
         );
     }
 

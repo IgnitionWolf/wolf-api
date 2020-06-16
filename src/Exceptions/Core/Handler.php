@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Exceptions\Core;
+namespace IgnitionWolf\API\Exceptions\Core;
 
 use Exception;
 use Flugg\Responder\Facades\Responder;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Spatie\Skeleton\Exceptions\Core\ExceptionPayload as Payload;
+use IgnitionWolf\API\Exceptions\Core\ExceptionPayload as Payload;
 use Throwable;
 
 /**

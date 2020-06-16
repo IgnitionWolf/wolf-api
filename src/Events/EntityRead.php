@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Events;
+namespace IgnitionWolf\API\Events;
 
 /**
  * This event is dispatched when an entity is read.
