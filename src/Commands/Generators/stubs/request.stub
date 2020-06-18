@@ -4,7 +4,7 @@ namespace $NAMESPACE$;
 
 use IgnitionWolf\API\Requests\EntityRequest;
 
-abstract class $CLASS$ extends EntityRequest
+class $CLASS$ extends EntityRequest
 {
     public static $entity;
 

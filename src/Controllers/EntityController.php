@@ -4,22 +4,13 @@ namespace IgnitionWolf\API\Controllers;
 
 use IgnitionWolf\API\Controllers\BaseController;
 use IgnitionWolf\API\Events\EntityCreated;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
-use IgnitionWolf\API\Exceptions\NotAuthorizedException;
-use IgnitionWolf\API\Exceptions\ValidationException;
 use IgnitionWolf\API\Requests\EntityRequest;
-use Flugg\Responder\Transformers\Transformer;
 use ReflectionClass;
 use IgnitionWolf\API\Events\EntityUpdated;
-use IgnitionWolf\API\Requests\CreateRequest;
-use IgnitionWolf\API\Requests\DeleteRequest;
-use IgnitionWolf\API\Requests\ReadRequest;
-use IgnitionWolf\API\Requests\UpdateRequest;
 
 abstract class EntityController extends BaseController
 {
@@ -38,7 +29,7 @@ abstract class EntityController extends BaseController
      */
     public function create(Request $request)
     {
-        $data = $this->validateRequest($request, CreateRequest::class);
+        $data = $this->validateRequest($request, 'create');
 
         $entity = new static::$entity;
 
@@ -46,7 +37,11 @@ abstract class EntityController extends BaseController
          * Fill the entity data
          */
         $data = $request->only($entity->getFillable());
-        $entity->fill($data)->automap()->save();
+        $entity->fill($data);
+        if (method_exists($entity, 'automap')) {
+            $entity->automap();
+        }
+        $entity->save();
 
         /**
          * Dispatch events
@@ -65,7 +60,7 @@ abstract class EntityController extends BaseController
      */
     public function delete(Request $request, $id)
     {
-        $this->validateRequest($request, DeleteRequest::class);
+        $this->validateRequest($request, 'delete');
 
         if (!$entity = static::$entity::find($id)) {
             throw new EntityNotFoundException;
@@ -85,16 +80,7 @@ abstract class EntityController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $this->validateRequest($request, UpdateRequest::class);
-
-        /**
-         * Validate the Request
-         */
-        $validator = Validator::make($request->all(), $data);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
+        $this->validateRequest($request, 'update');
 
         /**
          * Update the Entity
@@ -121,9 +107,9 @@ abstract class EntityController extends BaseController
      * @param integer $id
      * @return JsonResponse
      */
-    public function get(Request $request, $id)
+    public function read(Request $request, $id)
     {
-        $this->validateRequest($request, ReadRequest::class);
+        $this->validateRequest($request, 'read');
 
         if (!$entity = static::$entity::find($id)) {
             throw new EntityNotFoundException;
@@ -136,24 +122,31 @@ abstract class EntityController extends BaseController
      * Check if there is a FormRequest to handle this action.
      * This only works for basic CRUD actions.
      *
+     * Naming Convention: Namespace\Requests\{Action}{Model}
+     *
      * @param string $type
      * @return void
      */
     public function validateRequest(Request &$request, string $type)
     {
-        $formRequest = $type;
-        if (!class_exists($formRequest)) {
-
+        $formRequest = null;
+        if (!class_exists($type)) {
+            $explodedEntity = explode('\\', static::$entity);
             $formRequest = sprintf(
-                "%s\\Requests\\%s%sRequest",
+                "%s\\Http\\Requests\\%s%sRequest",
                 $this->getNamespace(),
                 ucfirst($type),
-                get_class(new static::$entity)
+                end($explodedEntity)
             );
 
             if (!class_exists($formRequest)) {
-                return;
+                $formRequest = sprintf(
+                    "IgnitionWolf\\API\\Requests\\%sRequest",
+                    ucfirst($type)
+                );
             }
+        } else {
+            $formRequest = $type;
         }
 
         // Reflect the request and make sure it inherits the correct class

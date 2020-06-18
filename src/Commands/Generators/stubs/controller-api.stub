@@ -6,5 +6,5 @@ use IgnitionWolf\API\Controllers\EntityController;
 
 class $CLASS$ extends EntityController
 {
-    //
+    protected static $entity;
 }

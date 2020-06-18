@@ -87,7 +87,7 @@ class Handler extends ExceptionHandler
                 $data['message'] = Payload::$defaults[Payload::ARG_MESSAGE];
             }
 
-            if (Config::get('app.debug')) {
+            if (Config::get('app.debug') === true) {
                 return parent::render($request, $exception);
             }
         }
