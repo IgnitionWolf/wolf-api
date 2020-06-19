@@ -3,6 +3,7 @@
 namespace IgnitionWolf\API;
 
 use Exception;
+use IgnitionWolf\API\Routing\Router;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Support\Stub;
@@ -27,6 +28,8 @@ class WolfAPIServiceProvider extends ServiceProvider
              */
             Stub::setBasePath(sprintf("%s/Commands/Generators/stubs", __DIR__));
         }
+
+        $this->app['router'] = $this->app->make(Router::class);
 
         /**
          * Entity validator that tries to find a certain entity ID.
