@@ -11,7 +11,7 @@ class DeleteRequest extends EntityRequest
     /**
      * {@inheritdoc}
      */
-    public function authorize($key)
+    public function authorize()
     {
         return $this->can('delete', $this->entity);
     }

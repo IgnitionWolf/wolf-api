@@ -58,26 +58,6 @@ abstract class EntityController extends BaseController
     }
 
     /**
-     * Delete a specific entity ID.
-     *
-     * @param Request $request
-     * @param integer $id
-     * @return JsonResponse
-     */
-    public function destroy(Request $request, $id)
-    {
-        $this->validateRequest($request, 'delete');
-
-        if (!$entity = static::$entity::find($id)) {
-            throw new EntityNotFoundException;
-        }
-
-        $entity->delete();
-
-        return $this->success();
-    }
-
-    /**
      * Update a specific entity ID.
      *
      * @param Request $request
@@ -96,7 +76,12 @@ abstract class EntityController extends BaseController
         }
 
         $data = $request->only($entity->getFillable());
-        $entity->fill($data)->automap()->save();
+        $entity->fill($data);
+        $entity->automap();
+        
+        $relationshipData = $request->only($entity->getRelationships());
+        $entity->fillRelationships($relationshipData);
+        $entity->save();
 
         /**
          * Dispatch events
@@ -104,6 +89,26 @@ abstract class EntityController extends BaseController
         event(new EntityUpdated($entity));
 
         return $this->success($entity);
+    }
+
+    /**
+     * Delete a specific entity ID.
+     *
+     * @param Request $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function destroy(Request $request, $id)
+    {
+        $this->validateRequest($request, 'delete');
+
+        if (!$entity = static::$entity::find($id)) {
+            throw new EntityNotFoundException;
+        }
+
+        $entity->delete();
+
+        return $this->success();
     }
 
     /**

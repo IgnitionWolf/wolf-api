@@ -4,11 +4,13 @@ namespace IgnitionWolf\API\Entity;
 
 use IgnitionWolf\API\Entity\Automap\Automapable;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Model extends EloquentModel
 {
     use Automapable;
+    use SoftDeletes;
 
     protected $relationships = [];
 
@@ -42,7 +44,7 @@ class Model extends EloquentModel
                 if (!empty($data)) {
                     $data = explode(',', $data);
                     
-                    $this->$relationship()->attach($data);
+                    $this->$relationship()->sync($data);
                 }
             }
         }
