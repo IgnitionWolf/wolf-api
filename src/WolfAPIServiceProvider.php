@@ -3,7 +3,6 @@
 namespace IgnitionWolf\API;
 
 use Exception;
-use IgnitionWolf\API\Routing\Router;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Support\Stub;
@@ -15,7 +14,7 @@ class WolfAPIServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole() && $this->app->environment() === 'local') {
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('api.php'),
             ], 'config');
@@ -29,14 +28,14 @@ class WolfAPIServiceProvider extends ServiceProvider
             Stub::setBasePath(sprintf("%s/Commands/Generators/stubs", __DIR__));
         }
 
-        $this->app['router'] = $this->app->make(Router::class);
-
         /**
          * Entity validator that tries to find a certain entity ID.
          *
          * Validator usage:
          *
          *      entity:{module}/{entity}
+         *
+         * This also accepts ids separated by commas.
          */
         Validator::extend('entity', function ($attribute, $value, $parameters, $validator) {
 
@@ -55,12 +54,14 @@ class WolfAPIServiceProvider extends ServiceProvider
                 );
             }
 
-            $instance = $entity::find($value);
-            if ($instance) {
-                return true;
+            foreach (explode(',', trim($value)) as $id) {
+                $instance = $entity::find($id);
+                if (!$instance) {
+                    return false;
+                }
             }
 
-            return false;
+            return true;
         });
 
         Validator::replacer('entity', function ($message, $attribute, $rule, $parameters) {
@@ -77,5 +78,9 @@ class WolfAPIServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api');
 
         $this->app->register(ExceptionServiceProvider::class);
+
+        if ($this->app->runningInConsole() && $this->app->environment() === 'local') {
+            $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
+        }
     }
 }

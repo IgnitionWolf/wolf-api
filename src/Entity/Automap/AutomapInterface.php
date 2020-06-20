@@ -1,15 +1,15 @@
 <?php
 
-namespace IgnitionWolf\API\Automap;
+namespace IgnitionWolf\API\Entity\Automap;
 
-use Illuminate\Database\Eloquent\Model;
+use IgnitionWolf\API\Entity\Model;
 
 interface AutomapInterface
 {
     /**
      * Automatically map an entity attribute.
      *
-     * @param \Illuminate\Database\Eloquent\Model $entity
+     * @param \IgnitionWolf\API\Entity\Model $entity
      * @param string $attribute
      * @return mixed
      */

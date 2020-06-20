@@ -3,6 +3,7 @@
 namespace IgnitionWolf\API\Controllers;
 
 use IgnitionWolf\API\Controllers\BaseController;
+use IgnitionWolf\API\Entity\Model;
 use IgnitionWolf\API\Events\EntityCreated;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,10 +28,13 @@ abstract class EntityController extends BaseController
      * @param Request $request
      * @return void
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $data = $this->validateRequest($request, 'create');
 
+        /**
+         * @var Model
+         */
         $entity = new static::$entity;
 
         /**
@@ -38,9 +42,11 @@ abstract class EntityController extends BaseController
          */
         $data = $request->only($entity->getFillable());
         $entity->fill($data);
-        if (method_exists($entity, 'automap')) {
-            $entity->automap();
-        }
+        $entity->automap();
+        $entity->save();
+
+        $relationshipData = $request->only($entity->getRelationships());
+        $entity->fillRelationships($relationshipData);
         $entity->save();
 
         /**
@@ -58,7 +64,7 @@ abstract class EntityController extends BaseController
      * @param integer $id
      * @return JsonResponse
      */
-    public function delete(Request $request, $id)
+    public function destroy(Request $request, $id)
     {
         $this->validateRequest($request, 'delete');
 
@@ -107,7 +113,7 @@ abstract class EntityController extends BaseController
      * @param integer $id
      * @return JsonResponse
      */
-    public function read(Request $request, $id)
+    public function show(Request $request, $id)
     {
         $this->validateRequest($request, 'read');
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use IgnitionWolf\API\Exceptions\Core\ExceptionPayload as Payload;
+use Illuminate\Support\Facades\Route;
 use Throwable;
 
 /**

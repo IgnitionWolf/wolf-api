@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Automap;
+namespace IgnitionWolf\API\Entity\Automap;
 
 /**
  * Make an entity auto-mapable, this allows automatic data assignment upon creation.
