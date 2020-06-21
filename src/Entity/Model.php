@@ -41,9 +41,16 @@ class Model extends EloquentModel
                     $data = $relationshipData[$relationship];
                 }
                 
-                if (!empty($data)) {
+                if (empty($data)) {
+                    continue;
+                }
+                
+                if (($encoded = json_decode($data, true)) && !is_int($encoded)) {
+                    // Handle model creation from array
+                    $this->$relationship()->create($encoded);
+                } else {
+                    // Handle IDs (i.e: 1 / 1,2)
                     $data = explode(',', $data);
-                    
                     $this->$relationship()->sync($data);
                 }
             }

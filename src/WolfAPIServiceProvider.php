@@ -3,9 +3,12 @@
 namespace IgnitionWolf\API;
 
 use Exception;
+use IgnitionWolf\API\Middleware\DebugParameter;
+use IgnitionWolf\API\Services\RequestValidator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Support\Stub;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class WolfAPIServiceProvider extends ServiceProvider
 {
@@ -28,6 +31,11 @@ class WolfAPIServiceProvider extends ServiceProvider
             Stub::setBasePath(sprintf("%s/Commands/Generators/stubs", __DIR__));
         }
 
+        $router = $this->app['router'];
+        $router->pushMiddlewareToGroup('api', DebugParameter::class);
+
+        $app = &$this->app;
+
         /**
          * Entity validator that tries to find a certain entity ID.
          *
@@ -37,7 +45,7 @@ class WolfAPIServiceProvider extends ServiceProvider
          *
          * This also accepts ids separated by commas.
          */
-        Validator::extend('entity', function ($attribute, $value, $parameters, $validator) {
+        Validator::extend('entity', function ($attribute, $value, $parameters, $validator) use ($app) {
 
             $entity = $parameters[0];
 
@@ -45,19 +53,30 @@ class WolfAPIServiceProvider extends ServiceProvider
                 throw new Exception('Format in entity validator must be: {module}/{entity}.');
             }
 
-            $entity = explode('/', $entity);
-            $entity = "Modules\\$entity[0]\\Entities\\$entity[1]";
+            [$module, $entity] = explode('/', $entity);
+            $namespace = "Modules\\$module\\Entities\\$entity";
 
-            if (!class_exists($entity)) {
+            if (!class_exists($namespace)) {
                 throw new Exception(
-                    "Class $entity not found. Remember format in entity validator must be: {module}/{entity}."
+                    "Class $namespace not found. Remember format in entity validator must be: {module}/{entity}."
                 );
             }
+            
+            /**
+             * Check if the request is passing an array, requesting to create and associate a new model.
+             */
+            if (($data = json_decode($value, true)) && !is_int($data)) {
+                $previous = $app['request']->query;
+                $app['request']->query = new ParameterBag($data);
 
-            foreach (explode(',', trim($value)) as $id) {
-                $instance = $entity::find($id);
-                if (!$instance) {
-                    return false;
+                RequestValidator::validate($app['request'], $namespace, 'create');
+                $app['request']->query = $previous;
+            } else {
+                foreach (explode(',', trim($value)) as $id) {
+                    $instance = $namespace::find($id);
+                    if (!$instance) {
+                        return false;
+                    }
                 }
             }
 

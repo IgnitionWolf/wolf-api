@@ -9,9 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
-use IgnitionWolf\API\Requests\EntityRequest;
-use ReflectionClass;
 use IgnitionWolf\API\Events\EntityUpdated;
+use IgnitionWolf\API\Services\RequestValidator;
 
 abstract class EntityController extends BaseController
 {
@@ -30,7 +29,7 @@ abstract class EntityController extends BaseController
      */
     public function store(Request $request)
     {
-        $data = $this->validateRequest($request, 'create');
+        RequestValidator::validate($request, static::$entity, 'create');
 
         /**
          * @var Model
@@ -66,7 +65,7 @@ abstract class EntityController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $this->validateRequest($request, 'update');
+        RequestValidator::validate($request, static::$entity, 'update');
 
         /**
          * Update the Entity
@@ -78,7 +77,7 @@ abstract class EntityController extends BaseController
         $data = $request->only($entity->getFillable());
         $entity->fill($data);
         $entity->automap();
-        
+
         $relationshipData = $request->only($entity->getRelationships());
         $entity->fillRelationships($relationshipData);
         $entity->save();
@@ -100,7 +99,7 @@ abstract class EntityController extends BaseController
      */
     public function destroy(Request $request, $id)
     {
-        $this->validateRequest($request, 'delete');
+        RequestValidator::validate($request, static::$entity, 'delete');
 
         if (!$entity = static::$entity::find($id)) {
             throw new EntityNotFoundException;
@@ -120,63 +119,12 @@ abstract class EntityController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        $this->validateRequest($request, 'read');
+        RequestValidator::validate($request, static::$entity, 'read');
 
         if (!$entity = static::$entity::find($id)) {
             throw new EntityNotFoundException;
         }
 
         return $this->success($entity);
-    }
-
-    /**
-     * Check if there is a FormRequest to handle this action.
-     * This only works for basic CRUD actions.
-     *
-     * Naming Convention: Namespace\Requests\{Action}{Model}
-     *
-     * @param string $type
-     * @return void
-     */
-    public function validateRequest(Request &$request, string $type)
-    {
-        $formRequest = null;
-        if (!class_exists($type)) {
-            $explodedEntity = explode('\\', static::$entity);
-            $formRequest = sprintf(
-                "%s\\Http\\Requests\\%s%sRequest",
-                $this->getNamespace(),
-                ucfirst($type),
-                end($explodedEntity)
-            );
-
-            if (!class_exists($formRequest)) {
-                $formRequest = sprintf(
-                    "IgnitionWolf\\API\\Requests\\%sRequest",
-                    ucfirst($type)
-                );
-            }
-        } else {
-            $formRequest = $type;
-        }
-
-        // Reflect the request and make sure it inherits the correct class
-        $reflection = new ReflectionClass($formRequest);
-        if (!$reflection->isSubclassOf(EntityRequest::class)) {
-            throw new \Exception("$formRequest must inherit EntityRequest master class.");
-        }
-
-        $request = app()->make($formRequest);
-    }
-
-    /**
-     * Get the base namespace string.
-     * @return string
-     */
-    private function getNamespace(): string
-    {
-        $reflection = new ReflectionClass($this);
-        $namespace = $reflection->getNamespaceName();
-        return str_replace('\\Http\\Controllers', '', $namespace);
     }
 }
