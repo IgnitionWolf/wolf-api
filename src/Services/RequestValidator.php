@@ -2,6 +2,7 @@
 
 namespace IgnitionWolf\API\Services;
 
+use Exception;
 use Illuminate\Http\Request;
 use IgnitionWolf\API\Requests\EntityRequest;
 use Illuminate\Container\Container;
@@ -20,45 +21,92 @@ class RequestValidator
      *
      * @param Request $request The request to validate.
      * @param string $entity The entity name.
-     * @param string $type The type of request (create/update, etc).
+     * @param string $action The type of request (create/update, etc). Could be a FormRequest.
      * @return void
      */
-    public static function validate(Request &$request, string $entity, string $type): void
+    public static function validate(Request &$request, string $entity, string $action): void
     {
         $formRequest = null;
-        if (!class_exists($type)) {
+        if (!class_exists($action)) {
             $explodedEntity = explode('\\', $entity);
-            $formRequest = sprintf(
-                "%s\\Http\\Requests\\%s%sRequest",
-                self::getNamespace($entity),
-                ucfirst($type),
-                end($explodedEntity)
-            );
+            $options = self::getPossibleRequests(self::getNamespace($entity), end($explodedEntity), ucfirst($action));
 
-            if (!class_exists($formRequest)) {
-                $formRequest = sprintf(
-                    "IgnitionWolf\\API\\Requests\\%sRequest",
-                    ucfirst($type)
-                );
+            foreach ($options as $option) {
+                $formRequest = $option;
+                if (class_exists($option)) {
+                    break;
+                }
+            }
+
+            if (!$formRequest) {
+                return;
             }
         } else {
-            $formRequest = $type;
+            $formRequest = $action;
         }
 
         // Reflect the request and make sure it inherits the correct class
         $reflection = new ReflectionClass($formRequest);
         if (!$reflection->isSubclassOf(EntityRequest::class)) {
-            throw new \Exception("$formRequest must inherit EntityRequest master class.");
+            throw new Exception("$formRequest must inherit EntityRequest master class.");
         }
 
         $request = app()->make($formRequest);
     }
 
     /**
+     * Get a list of possible form request. It fallsback by index order.
+     *
+     * @param string $namespace
+     * @param string $entity
+     * @param string $action
+     * @return array
+     */
+    public static function getPossibleRequests(string $namespace, string $entity, string $action): array
+    {
+        $options = [];
+
+        array_push($options, sprintf(
+            "%s\\Http\\Requests\\%s%sRequest",
+            $namespace,
+            $action,
+            $entity
+        ));
+
+        array_push($options, sprintf(
+            "%s\\Http\\Requests\\%s\\%sRequest",
+            $namespace,
+            $entity,
+            $action
+        ));
+
+        if ($action === 'Update') {
+            array_push($options, sprintf(
+                "%s\\Http\\Requests\\Create%sRequest",
+                $namespace,
+                $entity,
+            ));
+
+            array_push($options, sprintf(
+                "%s\\Http\\Requests\\%s\\CreateRequest",
+                $namespace,
+                $entity,
+            ));
+        }
+
+        array_push($options, sprintf(
+            "IgnitionWolf\\API\\Requests\\%sRequest",
+            $action
+        ));
+
+        return $options;
+    }
+
+    /**
      * Get the base namespace string.
      * @return string
      */
-    private static function getNamespace($class): string
+    public static function getNamespace($class): string
     {
         if (strpos($class, 'Modules\\') !== false) {
             return substr($class, 0, strpos($class, '\\', 9));

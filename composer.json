@@ -14,10 +14,16 @@
             "role": "Developer"
         }
     ],
+    "repositories": [{
+        "type": "path", 
+        "url": "/home/mauricio/projects/docs/",
+        "symlink": true
+    }],
     "require": {
         "php": "^7.3",
         "flugger/laravel-responder": "^3.1",
         "laracasts/generators": "^1.1",
+        "ignitionwolf/wolf-api-docs": "dev-master",
         "nwidart/laravel-modules": "^7.0",
         "silber/bouncer": "v1.0.0-rc.8",
         "tymon/jwt-auth": "^1.0"

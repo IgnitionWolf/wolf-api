@@ -22,7 +22,7 @@ abstract class EntityController extends BaseController
     protected static $entity;
 
     /**
-     * Store a resource in the database.
+     * Create a entity.
      *
      * @param Request $request
      * @return void
@@ -111,7 +111,7 @@ abstract class EntityController extends BaseController
     }
 
     /**
-     * Get a specific entity ID.
+     * Read a specific entity ID.
      *
      * @param Request $request
      * @param integer $id
@@ -126,5 +126,16 @@ abstract class EntityController extends BaseController
         }
 
         return $this->success($entity);
+    }
+
+    /**
+     * List the entities.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function index(Request $request)
+    {
+        return $this->success([]);
     }
 }
