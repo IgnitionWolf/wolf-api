@@ -6,7 +6,7 @@ namespace IgnitionWolf\API\Requests;
  * Handles authorization for listing entities.
  * This should be extended and used for specific entities 'list' actions.
  */
-class ListRequest extends EntityRequest
+class ListEntityRequest extends EntityRequest
 {
     /**
      * {@inheritdoc}

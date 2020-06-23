@@ -8,6 +8,8 @@ class $CLASS$ extends $PARENT_CLASS$
 {
     protected static $entity;
 
+    public static $rules = [];
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -15,6 +17,6 @@ class $CLASS$ extends $PARENT_CLASS$
      */
     public function rules()
     {
-        return [];
+        return self::$rules;
     }
 }

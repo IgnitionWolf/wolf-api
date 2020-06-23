@@ -33,8 +33,12 @@ class RequestValidator
 
             foreach ($options as $option) {
                 $formRequest = $option;
-                if (class_exists($option)) {
-                    break;
+                try {
+                    if (class_exists($option)) {
+                        break;
+                    }
+                } catch (\Exception $e) {
+                    //
                 }
             }
 
@@ -80,22 +84,8 @@ class RequestValidator
             $action
         ));
 
-        if ($action === 'Update') {
-            array_push($options, sprintf(
-                "%s\\Http\\Requests\\Create%sRequest",
-                $namespace,
-                $entity,
-            ));
-
-            array_push($options, sprintf(
-                "%s\\Http\\Requests\\%s\\CreateRequest",
-                $namespace,
-                $entity,
-            ));
-        }
-
         array_push($options, sprintf(
-            "IgnitionWolf\\API\\Requests\\%sRequest",
+            "IgnitionWolf\\API\\Requests\\%sEntityRequest",
             $action
         ));
 

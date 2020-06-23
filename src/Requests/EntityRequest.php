@@ -12,7 +12,7 @@ abstract class EntityRequest extends FormRequest
 {
     use Bounces;
 
-    public static $entity;
+    protected static $entity;
 
     /**
      * Get the validation rules that apply to the request.

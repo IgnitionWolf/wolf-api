@@ -2,9 +2,9 @@
 
 namespace $NAMESPACE$;
 
-use $PARENT_CLASS_NAMESPACE$;
+use IgnitionWolf\API\Requests\UpdateEntityRequest;
 
-class $CLASS$ extends $PARENT_CLASS$
+class $CLASS$ extends UpdateEntityRequest
 {
     protected static $entity;
 
@@ -15,6 +15,6 @@ class $CLASS$ extends $PARENT_CLASS$
      */
     public function rules()
     {
-        return [];
+        return $PARENT_CLASS$::$rules;
     }
 }

@@ -3,6 +3,8 @@
 namespace IgnitionWolf\API;
 
 use Exception;
+use IgnitionWolf\API\Commands\Generators\CRUDMakeCommand;
+use IgnitionWolf\API\Commands\Generators\RequestMakeCommand;
 use IgnitionWolf\API\Middleware\DebugParameter;
 use IgnitionWolf\API\Services\RequestValidator;
 use Illuminate\Support\Facades\Validator;
@@ -31,11 +33,32 @@ class WolfAPIServiceProvider extends ServiceProvider
             Stub::setBasePath(sprintf("%s/Commands/Generators/stubs", __DIR__));
         }
 
-        $router = $this->app['router'];
-        $router->pushMiddlewareToGroup('api', DebugParameter::class);
+        $this->app['router']->pushMiddlewareToGroup('api', DebugParameter::class);
 
-        $app = &$this->app;
+        $this->commands([
+            RequestMakeCommand::class,
+            CRUDMakeCommand::class
+        ]);
 
+        $this->registerValidators($this->app);
+    }
+
+    /**
+     * Register the application services.
+     */
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api');
+
+        $this->app->register(ExceptionServiceProvider::class);
+
+        if ($this->app->runningInConsole() && $this->app->environment() === 'local') {
+            $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
+        }
+    }
+
+    private function registerValidators(&$app)
+    {
         /**
          * Entity validator that tries to find a certain entity ID.
          *
@@ -87,19 +110,5 @@ class WolfAPIServiceProvider extends ServiceProvider
             $entity = explode('/', $parameters[0]);
             return "$entity[1] not found.";
         });
-    }
-
-    /**
-     * Register the application services.
-     */
-    public function register()
-    {
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api');
-
-        $this->app->register(ExceptionServiceProvider::class);
-
-        if ($this->app->runningInConsole() && $this->app->environment() === 'local') {
-            $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
-        }
     }
 }
