@@ -12,6 +12,13 @@ class Model extends EloquentModel
     use Automapable;
     use SoftDeletes;
 
+    /**
+     * List of relationship names.
+     * For example, if you have addresses(): HasMany you need to add 'addresses'.
+     * This is used to map relationship data automatically from requests.
+     *
+     * @var array
+     */
     protected $relationships = [];
 
     /**
