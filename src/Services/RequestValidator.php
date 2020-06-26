@@ -94,6 +94,7 @@ class RequestValidator
 
     /**
      * Get the base namespace string.
+     * @param string $class
      * @return string
      */
     public static function getNamespace($class): string

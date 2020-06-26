@@ -5,6 +5,7 @@ namespace IgnitionWolf\API;
 use Exception;
 use IgnitionWolf\API\Commands\Generators\CRUDMakeCommand;
 use IgnitionWolf\API\Commands\Generators\RequestMakeCommand;
+use IgnitionWolf\API\Commands\Generators\TransformerMakeCommand;
 use IgnitionWolf\API\Middleware\DebugParameter;
 use IgnitionWolf\API\Services\RequestValidator;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +38,8 @@ class WolfAPIServiceProvider extends ServiceProvider
 
         $this->commands([
             RequestMakeCommand::class,
-            CRUDMakeCommand::class
+            CRUDMakeCommand::class,
+            TransformerMakeCommand::class
         ]);
 
         $this->registerValidators($this->app);

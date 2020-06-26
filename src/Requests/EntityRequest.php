@@ -13,6 +13,7 @@ abstract class EntityRequest extends FormRequest
     use Bounces;
 
     /**
+     * @psalm-var class-string
      * @var string
      */
     protected static $entity;

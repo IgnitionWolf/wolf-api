@@ -5,7 +5,7 @@ namespace IgnitionWolf\API\Controllers;
 use IgnitionWolf\API\Controllers\BaseController;
 use IgnitionWolf\API\Entity\Model;
 use IgnitionWolf\API\Events\EntityCreated;
-use Illuminate\Http\JsonResponse;
+use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
 use Illuminate\Http\Request;
 
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
@@ -17,6 +17,7 @@ abstract class EntityController extends BaseController
     /**
      * Points to the entity to be handled in the controller.
      *
+     * @psalm-var class-string
      * @var string
      */
     protected static $entity;
@@ -25,9 +26,9 @@ abstract class EntityController extends BaseController
      * Create a entity.
      *
      * @param Request $request
-     * @return void
+     * @return SuccessResponseBuilder
      */
-    public function store(Request $request)
+    public function store(Request $request): SuccessResponseBuilder
     {
         RequestValidator::validate($request, static::$entity, 'create');
 
@@ -61,7 +62,7 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @param integer $id
-     * @return JsonResponse
+     * @return SuccessResponseBuilder
      */
     public function update(Request $request, $id)
     {
@@ -95,7 +96,7 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @param integer $id
-     * @return JsonResponse
+     * @return SuccessResponseBuilder
      */
     public function destroy(Request $request, $id)
     {
@@ -115,7 +116,7 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @param integer $id
-     * @return JsonResponse
+     * @return SuccessResponseBuilder
      */
     public function show(Request $request, $id)
     {
@@ -132,7 +133,7 @@ abstract class EntityController extends BaseController
      * List the entities.
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return SuccessResponseBuilder
      */
     public function index(Request $request)
     {
