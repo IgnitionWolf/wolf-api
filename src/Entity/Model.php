@@ -22,6 +22,13 @@ class Model extends EloquentModel
     protected $relationships = [];
 
     /**
+     * Automapable settings.
+     *
+     * @var array
+     */
+    protected $map = [];
+
+    /**
      * Get the relationships array list.
      *
      * @return array

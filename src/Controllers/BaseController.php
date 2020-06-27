@@ -24,7 +24,7 @@ class BaseController extends Controller
      */
     public function success($data = null, $transformer = null)
     {
-        /* If it's an array then let's map it into a Fractal\Item */
+        /* If it's an array then let's convert it into a Fractal\Item */
         if (is_array($data)) {
             $data = new Item($data);
         }
