@@ -12,4 +12,11 @@ class Model extends EloquentModel
     use Automapable;
     use SoftDeletes;
     use HasRelationships;
+    
+    /**
+     * Automapable settings.
+     *
+     * @var array
+     */
+    protected $map = [];
 }

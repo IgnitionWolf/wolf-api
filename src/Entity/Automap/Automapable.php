@@ -8,13 +8,6 @@ namespace IgnitionWolf\API\Entity\Automap;
 trait Automapable
 {
     /**
-     * Automapable settings.
-     *
-     * @var array
-     */
-    protected $map = [];
-
-    /**
      * Automap model attributes that will not be set in requests.
      *
      * @param array $attributes
