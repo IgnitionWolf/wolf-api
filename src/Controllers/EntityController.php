@@ -37,6 +37,8 @@ abstract class EntityController extends BaseController
          */
         $entity = new static::$entity;
 
+        $this->processStore($request);
+
         /**
          * Fill the entity data
          */
