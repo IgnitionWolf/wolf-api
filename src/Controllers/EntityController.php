@@ -42,7 +42,11 @@ abstract class EntityController extends BaseController
          */
         $data = $request->only($entity->getFillable());
         $entity->fill($data);
-        $entity->automap();
+        
+        if (method_exists($entity, 'automap')) {
+            $entity->automap();
+        }
+        
         $entity->save();
 
         $relationshipData = $request->only($entity->getRelationships());
@@ -77,7 +81,10 @@ abstract class EntityController extends BaseController
 
         $data = $request->only($entity->getFillable());
         $entity->fill($data);
-        $entity->automap();
+        
+        if (method_exists($entity, 'automap')) {
+            $entity->automap();
+        }
 
         $relationshipData = $request->only($entity->getRelationships());
         $entity->fillRelationships($relationshipData);

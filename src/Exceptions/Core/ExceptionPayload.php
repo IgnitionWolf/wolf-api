@@ -45,7 +45,7 @@ class ExceptionPayload extends \Illuminate\Support\MessageBag
 
     /**
      * Construct the payload object to be used in Exceptions that inherit BaseExtension.
-     * 
+     *
      * @param array $bag
      * @throws Exception
      * @return void
@@ -69,7 +69,7 @@ class ExceptionPayload extends \Illuminate\Support\MessageBag
 
     /**
      * Validate the payload by looking for required arguments.
-     * 
+     *
      * @param array $bag
      * @throws Exception
      * @return void

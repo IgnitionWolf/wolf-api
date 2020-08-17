@@ -20,6 +20,18 @@ return [
     | Mostly useful to intercept Laravel default exceptions with API exceptions.
     |
     */
-    'exceptions_bridge' => []
+    'exceptions_bridge' => [],
 
+    /*
+    |--------------------------------------------------------------------------
+    | User
+    |--------------------------------------------------------------------------
+    |
+    | You can configure user-related variables here.
+    |
+    */
+    'user' => [
+        'model' => \Modules\User\Entities\User::class,
+        'verifications' => true
+    ]
 ];

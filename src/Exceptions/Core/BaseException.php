@@ -7,7 +7,7 @@ use Exception;
 abstract class BaseException extends Exception
 {
     /**
-     * @var array
+     * @var array|string
      */
     protected $meta;
 

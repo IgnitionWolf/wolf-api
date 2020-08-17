@@ -13,6 +13,6 @@ class UpdateEntityRequest extends EntityRequest
      */
     public function authorize()
     {
-        return $this->can('update', $this->entity);
+        return $this->can('update', $this->findEntity($this->route('id')));
     }
 }

@@ -13,6 +13,6 @@ class ReadEntityRequest extends EntityRequest
      */
     public function authorize()
     {
-        return $this->can('read', $this->entity);
+        return $this->can('read', $this->findEntity($this->route('id')));
     }
 }

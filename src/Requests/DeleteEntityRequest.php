@@ -13,6 +13,6 @@ class DeleteEntityRequest extends EntityRequest
      */
     public function authorize()
     {
-        return $this->can('delete', $this->entity);
+        return $this->can('delete', $this->findEntity($this->route('id')));
     }
 }

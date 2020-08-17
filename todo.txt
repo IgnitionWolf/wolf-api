@@ -1,5 +1,0 @@
-1) Check automap creator and see if it can done outside modules
-2) Add a validator to authorize certain actions
-3) auto detect one to one relationship and map data
-4) duplicate entry error add to bridge
-5) add login
