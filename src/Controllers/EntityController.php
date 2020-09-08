@@ -144,6 +144,6 @@ abstract class EntityController extends BaseController
      */
     public function index(Request $request)
     {
-        return $this->success([]);
+        return $this->success(static::$entity::all());
     }
 }

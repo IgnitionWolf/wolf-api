@@ -47,7 +47,7 @@ class AuthenticateController extends BaseController
      */
     public function register(Request $request)
     {
-        // This will call RegisterEntityRequest
+        // This will call RegisterRequest
         RequestValidator::validate($request, $this->entity, 'register');
 
         $password = Hash::make($request->password);

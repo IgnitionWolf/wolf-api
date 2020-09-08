@@ -45,11 +45,11 @@ abstract class EntityRequest extends FormRequest
 
     public function findEntity(?int $id)
     {
-        if (!$this->entity) {
+        if (!static::$entity) {
             throw new \Exception('Tried to call findEntity() but the $entity has not been assigned yet.');
         }
 
-        return $this->entity::find($id);
+        return static::$entity::find($id);
     }
 
     /**
