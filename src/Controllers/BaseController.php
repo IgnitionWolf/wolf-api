@@ -10,6 +10,7 @@ use IgnitionWolf\API\Services\RequestValidator;
 use Illuminate\Routing\Controller;
 use League\Fractal\Resource\Item;
 use Illuminate\Database\Eloquent\Model;
+use IgnitionWolf\API\Entity\Model as IgnitionWolfModel;
 
 class BaseController extends Controller
 {
@@ -18,7 +19,7 @@ class BaseController extends Controller
     /**
      * Wrapper function to return a successful response.
      *
-     * @param null|array|Model $data
+     * @param null|array|Model|IgnitionWolfModel $data
      * @param Transformer|array $transformer
      * @return SuccessResponseBuilder
      */

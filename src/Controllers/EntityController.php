@@ -74,12 +74,18 @@ abstract class EntityController extends BaseController
 
         /**
          * Update the Entity
+         * @var Model
          */
         if (!$entity = static::$entity::find($id)) {
             throw new EntityNotFoundException;
         }
 
         $data = $request->only($entity->getFillable());
+
+        if (method_exists($entity, 'translate')) {
+            $this->fillTranslatable($entity, $data);
+        }
+
         $entity->fill($data);
         
         if (method_exists($entity, 'automap')) {
@@ -144,6 +150,31 @@ abstract class EntityController extends BaseController
      */
     public function index(Request $request)
     {
-        return $this->success(static::$entity::all());
+        return $this->success(static::$entity::all()->sortByDesc("id"));
+    }
+
+    /**
+     * Due to a bug in Spatie's package, we need to make sure translations
+     * are being handled correctly.
+     *
+     * @link https://github.com/spatie/laravel-translatable/issues/225
+     * @param Model $entity
+     * @param array $data
+     * @return void
+     */
+    private function fillTranslatable($entity, &$data)
+    {
+        foreach ($entity->getTranslatableAttributes() as $attribute) {
+            if (!isset($data[$attribute]) || empty($data[$attribute])) {
+                continue;
+            }
+
+            // Make sure the translatable attribute changed, then unset and assign it again.
+            if ($entity->$attribute !== $data[$attribute]) {
+                unset($entity->$attribute);
+                $entity->setTranslations($attribute, $data[$attribute]);
+                unset($data[$attribute]);
+            }
+        }
     }
 }

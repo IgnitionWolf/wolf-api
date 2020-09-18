@@ -18,6 +18,9 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use IgnitionWolf\API\Services\UserVerificationService;
 use IgnitionWolf\API\Entity\Authenticatable;
 
+use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
+use Flugg\Responder\Http\Responses\ErrorResponseBuilder;
+
 class AuthenticateController extends BaseController
 {
     /**
@@ -45,7 +48,7 @@ class AuthenticateController extends BaseController
      * @param Request $request
      * @return SuccessResponseBuilder
      */
-    public function register(Request $request)
+    public function register(Request $request): SuccessResponseBuilder
     {
         // This will call RegisterRequest
         RequestValidator::validate($request, $this->entity, 'register');
@@ -85,10 +88,9 @@ class AuthenticateController extends BaseController
      * Verify the user e-mail token.
      *
      * @param string $verificationCode
-     * @throws VerificationCodeException
      * @return SuccessResponseBuilder
      */
-    public function verifyUser($verificationCode)
+    public function verifyUser($verificationCode): SuccessResponseBuilder
     {
         $verification = $this->userVerification->verify($verificationCode);
         return $this->success($verification);
@@ -114,11 +116,25 @@ class AuthenticateController extends BaseController
     }
 
     /**
+     * Check if an user is logged in.
+     *
+     * @param Request $request
+     * @return SuccessResponseBuilder|ErrorResponseBuilder
+     */
+    public function check(Request $request)
+    {
+        if ($this->getCurrentUser()) {
+            return $this->success();
+        }
+        return $this->error();
+    }
+
+    /**
      * Log out the user by invalidating the JWT token.
      *
      * @return SuccessResponseBuilder
      */
-    public function logout()
+    public function logout(): SuccessResponseBuilder
     {
         $user = $this->getCurrentUser();
         JWTAuth::invalidate($user);
@@ -129,9 +145,10 @@ class AuthenticateController extends BaseController
     * Send the password reset link via e-mail.
     *
     * @param Request $request
+    * @throws EntityNotFoundException
     * @return SuccessResponseBuilder
      */
-    public function recover(Request $request)
+    public function recover(Request $request): SuccessResponseBuilder
     {
         $user = $this->entity::where('email', $request->email)->first();
         if (!$user) {
