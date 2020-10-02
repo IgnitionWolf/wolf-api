@@ -41,18 +41,25 @@ trait HasRelationships
                 } elseif (isset($relationshipData[$relationship])) {
                     $data = $relationshipData[$relationship];
                 }
-                
+
                 if (empty($data)) {
                     continue;
                 }
-                
-                if (($encoded = json_decode($data, true)) && !is_int($encoded)) {
+
+                if (($encoded = json_decode($data, true)) && !is_int((int) $encoded)) {
                     // Handle model creation from array
                     $this->$relationship()->create($encoded);
                 } else {
                     // Handle IDs (i.e: 1 / 1,2)
                     $data = explode(',', $data);
-                    $this->$relationship()->sync($data);
+
+                    if (empty($data)) continue;
+
+                    // For example, belongsTo() doesn't support sync() because it's a single value, not multiple.
+                    if (method_exists($this->$relationship(), 'sync')) {
+                        $this->$relationship()->sync($data);
+                    }
+                    else $this->$relationship()->associate($data[0]);
                 }
             }
         }

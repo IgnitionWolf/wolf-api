@@ -24,8 +24,8 @@ class DebugParameter
          * This is used for testing and troubleshooting purposes.
          */
         if (!App::environment('production')) {
-            if ($request->has('_debug') || $request->has('debug') || $request->has('dd')) {
-                Config::set('app.debug', $request->get('_debug') ?? $request->get('debug') ?? $request->get('dd') == 1);
+            if ((int) $request->get('debug', 0) == 1) {
+                Config::set('app.debug', true);
             }
         }
         return $next($request);

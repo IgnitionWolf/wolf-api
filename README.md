@@ -2,7 +2,14 @@
 
 This package converts your Laravel application to an API; it bundles by default all the necessary features to work as an API service.
 
-NOTICE: this project is still being worked on, highly functional but the documentation hasn't been scaffolded yet. Feel free to check the commits.
+## How it works
+
+This package provides a set of useful classes and magical utilities to convert your application
+into a REST API, providing support by default for Laravel Modules, JWT authentication, user roles and permissions,
+custom error handling, and a guaranteed response in JSON.
+
+It's highly recommended that you use Laravel Modules to scaffold your application in order to maintain
+a properly organized structure, and allowing you to manage your API easily.
 
 ## Installation
 
@@ -14,6 +21,22 @@ composer require ignitionwolf/wolf-api
 
 ## Usage
 
+### Models
+
+You can create your model using ```php artisan module:make-model```.
+
+### Controllers, routes, and handle requests
+
+
+## Package implementations
+
+### [Scout and Elastic Search](https://github.com/babenkoivan/scout-elasticsearch-driver)
+
+### Laravel Modules
+
+### Bouncer
+
+### JWT
 
 ## Testing
 

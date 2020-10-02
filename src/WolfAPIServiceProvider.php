@@ -8,6 +8,9 @@ use IgnitionWolf\API\Commands\Generators\RequestMakeCommand;
 use IgnitionWolf\API\Commands\Generators\TransformerMakeCommand;
 use IgnitionWolf\API\Middleware\DebugParameter;
 use IgnitionWolf\API\Rules\EntityRule;
+use IgnitionWolf\API\Strategies\Filter\ElasticCacheFilterStrategy;
+use IgnitionWolf\API\Strategies\Filter\EloquentFilterStrategy;
+use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -49,6 +52,11 @@ class WolfAPIServiceProvider extends ServiceProvider
             TransformerMakeCommand::class,
             AutomapMakeCommand::class
         ]);
+
+        $this->app->bind(
+            FilterStrategy::class,
+            ElasticCacheFilterStrategy::class
+        );
 
         $this->registerRules($this->app, [
             new EntityRule

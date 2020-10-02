@@ -24,6 +24,12 @@ class Authenticatable extends User implements JWTSubject
     protected $map = [];
 
     /**
+     * Allowed searchable attributes.
+     * @var string[]
+     */
+    static $searchable = [];
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

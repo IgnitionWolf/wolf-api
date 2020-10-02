@@ -3,6 +3,7 @@
 namespace IgnitionWolf\API\Controllers;
 
 use DateTime;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Password;
@@ -65,7 +66,7 @@ class AuthenticateController extends BaseController
          */
         $data = $request->only($entity->getFillable());
         $entity->fill($data);
-        
+
         if (method_exists($entity, 'automap')) {
             $entity->automap();
         }
@@ -106,13 +107,15 @@ class AuthenticateController extends BaseController
     {
         // This will call RegisterEntityRequest
         RequestValidator::validate($request, $this->entity, 'login');
-        
+
         $credentials = $request->only('email', 'password');
         if (!$token = JWTAuth::attempt($credentials)) {
             throw new FailedLoginException;
         }
 
-        return $this->success(['token' => $token]);
+        $user = User::where('email', $credentials['email'])->first();
+
+        return $this->success(['token' => $token, 'user' => $user]);
     }
 
     /**
@@ -123,8 +126,8 @@ class AuthenticateController extends BaseController
      */
     public function check(Request $request)
     {
-        if ($this->getCurrentUser()) {
-            return $this->success();
+        if ($user = $this->getCurrentUser()) {
+            return $this->success($user);
         }
         return $this->error();
     }
@@ -140,7 +143,7 @@ class AuthenticateController extends BaseController
         JWTAuth::invalidate($user);
         return $this->success();
     }
-    
+
     /**
     * Send the password reset link via e-mail.
     *
