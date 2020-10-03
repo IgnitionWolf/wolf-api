@@ -169,7 +169,23 @@ abstract class EntityController extends BaseController
     {
         $queryBuilder = static::$entity;
 
-        $queryBuilder = $this->filterStrategy->filter($request, $queryBuilder);
+        //$queryBuilder = $this->filterStrategy->filter($request, $queryBuilder);
+
+        $searchQuery = '';
+        $filters = json_decode($request->get('filter', '[]'));
+        foreach ($filters as $key => $filterSet) {
+            if (count($filterSet) > 1) {
+                $searchQuery .= "$key:(";
+                foreach ($filterSet as $idx => $filter) {
+                    if ($idx > 0) $searchQuery .= "OR $filter";
+                    else $searchQuery .= "$filter";
+                }
+                $searchQuery .= ") ";
+            }
+            else $searchQuery .= "$key:($filterSet[0])";
+        }
+
+        $queryBuilder = $queryBuilder::search($searchQuery);
 
         $queryBuilder = $queryBuilder->orderBy('id', 'desc');
 
