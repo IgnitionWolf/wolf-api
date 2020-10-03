@@ -167,28 +167,17 @@ abstract class EntityController extends BaseController
      */
     public function index(Request $request)
     {
-        $queryBuilder = static::$entity;
-
-        //$queryBuilder = $this->filterStrategy->filter($request, $queryBuilder);
-
-        $searchQuery = '';
-        $filters = json_decode($request->get('filter', '[]'));
-        foreach ($filters as $key => $filterSet) {
-            if (count($filterSet) > 1) {
-                $searchQuery .= "$key:(";
-                foreach ($filterSet as $idx => $filter) {
-                    if ($idx > 0) $searchQuery .= "OR $filter";
-                    else $searchQuery .= "$filter";
-                }
-                $searchQuery .= ") ";
-            }
-            else $searchQuery .= "$key:($filterSet[0])";
-        }
-
-        $queryBuilder = $queryBuilder::search($searchQuery);
+        /**
+         * Filter and sort the query
+         */
+        $filters = json_decode($request->get('filter', '[]'), true);
+        $queryBuilder = $this->filterStrategy->filter($filters, static::$entity);
 
         $queryBuilder = $queryBuilder->orderBy('id', 'desc');
 
+        /**
+         * Paginate and prepare the result
+         */
         $paginator = $queryBuilder->paginate((int)$request->get('limit', 10));
         $adapter = new IlluminatePaginatorAdapter($paginator);
 

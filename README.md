@@ -23,14 +23,23 @@ composer require ignitionwolf/wolf-api
 
 ### Models
 
-You can create your model using ```php artisan module:make-model```.
+You can create your model using ```php artisan module:make-model [name] [module]```.
 
 ### Controllers, routes, and handle requests
 
 
 ## Package implementations
 
-### [Scout and Elastic Search](https://github.com/babenkoivan/scout-elasticsearch-driver)
+### Laravel Scout
+
+This package supports 2 drivers by default: [PostgreSQL](https://github.com/pmatseykanets/laravel-scout-postgres) and [Elastic Cache](https://github.com/babenkoivan/elastic-scout-driver).
+The configuration will be detected automatically by WolfAPI and the filtering strategies will be chosen accordingly.
+
+There is also two new commands to handle entities indices per module.
+```
+php artisan module:scout:flush [model name / "*" for all] [module / "*" for all]
+php artisan module:scout:import [model name / "*" for all] [module / "*" for all]
+```
 
 ### Laravel Modules
 

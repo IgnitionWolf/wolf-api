@@ -5,12 +5,15 @@ namespace IgnitionWolf\API;
 use IgnitionWolf\API\Commands\Generators\AutomapMakeCommand;
 use IgnitionWolf\API\Commands\Generators\CRUDMakeCommand;
 use IgnitionWolf\API\Commands\Generators\RequestMakeCommand;
+use IgnitionWolf\API\Commands\Generators\ScoutFlushCommand;
+use IgnitionWolf\API\Commands\Generators\ScoutImportCommand;
 use IgnitionWolf\API\Commands\Generators\TransformerMakeCommand;
 use IgnitionWolf\API\Middleware\DebugParameter;
 use IgnitionWolf\API\Rules\EntityRule;
-use IgnitionWolf\API\Strategies\Filter\ElasticCacheFilterStrategy;
+use IgnitionWolf\API\Strategies\Filter\ElasticFilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\EloquentFilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
+use IgnitionWolf\API\Strategies\Filter\PostgreSQLFilterStrategy;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -18,6 +21,28 @@ use Nwidart\Modules\Support\Stub;
 
 class WolfAPIServiceProvider extends ServiceProvider
 {
+    /**
+     * Commands to register
+     * @var string[]
+     */
+    private $commands = [
+        RequestMakeCommand::class,
+        CRUDMakeCommand::class,
+        TransformerMakeCommand::class,
+        AutomapMakeCommand::class,
+        ScoutFlushCommand::class,
+        ScoutImportCommand::class
+    ];
+
+    /**
+     * Supported Laravel Scout drivers with their corresponding strategies/handlers.
+     * @var string[]
+     */
+    private $scoutStrategies = [
+        'elastic' => ElasticFilterStrategy::class,
+        'pgsql' => PostgreSQLFilterStrategy::class
+    ];
+
     /**
      * Bootstrap the application services.
      */
@@ -46,21 +71,18 @@ class WolfAPIServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/Routes/api.php');
             });
 
-        $this->commands([
-            RequestMakeCommand::class,
-            CRUDMakeCommand::class,
-            TransformerMakeCommand::class,
-            AutomapMakeCommand::class
-        ]);
-
-        $this->app->bind(
-            FilterStrategy::class,
-            ElasticCacheFilterStrategy::class
-        );
+        $this->commands($this->commands);
 
         $this->registerRules($this->app, [
             new EntityRule
         ]);
+
+        if (($scoutDriver = config('scout.driver')) && isset($this->scoutStrategies[$scoutDriver])) {
+            $this->app->bind(
+                FilterStrategy::class,
+                $this->scoutStrategies[$scoutDriver]
+            );
+        }
     }
 
     /**
