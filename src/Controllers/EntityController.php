@@ -176,14 +176,14 @@ abstract class EntityController extends BaseController
         $filters = json_decode($request->get('filter', '[]'), true);
         $queryBuilder = $this->filterStrategy->filter($filters, static::$entity);
 
-        if ($request->has('sort') && $sort = json_decode($request->get('sort'), true)) {
-            $queryBuilder = $queryBuilder->orderBy('id', 'desc');
+        if ($request->has('sort') && $sort = json_decode($request->get('sort'))) {
+            $queryBuilder = $queryBuilder->orderBy($sort->field, $sort->order);
         }
 
         /**
          * Paginate and prepare the result
          */
-        $paginator = $queryBuilder->paginate((int)$request->get('limit', 10));
+        $paginator = $queryBuilder->paginate((int) $request->get('limit', 10));
         $adapter = new IlluminatePaginatorAdapter($paginator);
 
         $collection = $paginator->getCollection();
