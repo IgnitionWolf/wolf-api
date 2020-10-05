@@ -164,16 +164,21 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws \Exception
      */
     public function index(Request $request)
     {
+        RequestValidator::validate($request, static::$entity, 'list');
+
         /**
          * Filter and sort the query
          */
         $filters = json_decode($request->get('filter', '[]'), true);
         $queryBuilder = $this->filterStrategy->filter($filters, static::$entity);
 
-        $queryBuilder = $queryBuilder->orderBy('id', 'desc');
+        if ($request->has('sort') && $sort = json_decode($request->get('sort'), true)) {
+            $queryBuilder = $queryBuilder->orderBy('id', 'desc');
+        }
 
         /**
          * Paginate and prepare the result

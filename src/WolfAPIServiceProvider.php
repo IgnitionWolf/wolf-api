@@ -10,6 +10,7 @@ use IgnitionWolf\API\Commands\Generators\ScoutImportCommand;
 use IgnitionWolf\API\Commands\Generators\TransformerMakeCommand;
 use IgnitionWolf\API\Middleware\DebugParameter;
 use IgnitionWolf\API\Rules\EntityRule;
+use IgnitionWolf\API\Rules\SyntaxRule;
 use IgnitionWolf\API\Strategies\Filter\ElasticFilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\EloquentFilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
@@ -74,7 +75,8 @@ class WolfAPIServiceProvider extends ServiceProvider
         $this->commands($this->commands);
 
         $this->registerRules($this->app, [
-            new EntityRule
+            new EntityRule,
+            new SyntaxRule
         ]);
 
         if (($scoutDriver = config('scout.driver')) && isset($this->scoutStrategies[$scoutDriver])) {

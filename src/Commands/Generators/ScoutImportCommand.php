@@ -52,7 +52,8 @@ class ScoutImportCommand extends Command
                 $this->call("scout:import", [
                     'model' => $model,
                 ]);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ use Illuminate\Contracts\Foundation\Application;
  *
  *      entity:{module}/{entity}
  *
- * This also accepts ids separated by commas.
+ * This accepts a single ID as value, or multiple IDs separated by commas.
  */
 class EntityRule implements Rule
 {
@@ -36,7 +36,7 @@ class EntityRule implements Rule
                     "Class $namespace not found. Remember format in entity validator must be: {module}/{entity}."
                 );
             }
-            
+
             /**
              * Check if the request is passing an array, requesting to create and associate a new model.
              */

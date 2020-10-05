@@ -2,6 +2,7 @@
 
 namespace IgnitionWolf\API\Requests;
 
+use Exception;
 use IgnitionWolf\API\Exceptions\ValidationException;
 use IgnitionWolf\API\Traits\Bounces;
 use Illuminate\Contracts\Validation\Validator;
@@ -30,12 +31,13 @@ abstract class EntityRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return $this->rules ?? [];
     }
 
     /**
      * Determine if the user is authorized to make this request.
      *
+     * @throws Exception
      * @return bool
      */
     public function authorize()
@@ -43,10 +45,16 @@ abstract class EntityRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Helper function to obtain the entity object of a specific ID.
+     * @param int|null $id
+     * @return mixed
+     * @throws Exception
+     */
     public function findEntity(?int $id)
     {
         if (!static::$entity) {
-            throw new \Exception('Tried to call findEntity() but the $entity has not been assigned yet.');
+            throw new Exception('Tried to call findEntity() but the $entity has not been assigned yet.');
         }
 
         return static::$entity::find($id);

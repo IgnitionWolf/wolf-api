@@ -53,10 +53,12 @@ class RequestMakeCommand extends OriginalRequestMakeCommand
             ]))->render();
         } elseif ($type === CreateEntityRequest::class) {
             $stub = '/request-create.stub';
+        } elseif ($type === ListEntityRequest::class) {
+            $stub = '/request-list.stub';
         } elseif ($type === EntityRequest::class) {
             $stub = '/request-plain.stub';
         }
-        
+
         return (new Stub($stub, [
             'NAMESPACE' => $this->getClassNamespace($module),
             'CLASS'     => $this->getClass(),

@@ -23,6 +23,7 @@ class RequestValidator
      * @param string $entity The entity name.
      * @param string $action The type of request (create/update, etc). Could be a FormRequest.
      * @return void
+     * @throws Exception
      */
     public static function validate(Request &$request, string $entity, string $action): void
     {

@@ -2,6 +2,8 @@
 
 namespace IgnitionWolf\API\Traits;
 
+use Exception;
+use IgnitionWolf\API\Entity\Authenticatable;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 trait Bounces
@@ -15,15 +17,20 @@ trait Bounces
      * Wrapper function to determine if an user can do a specific action.
      *
      * @param string $action
-     * @param Model $entity
+     * @param string $entity
      * @return bool
+     * @throws Exception
      */
-    public function can(string $action, $entity): bool
+    public function can(string $action, string $entity): bool
     {
         $user = $this->getCurrentUser();
 
         if (!$user) {
             return false;
+        }
+
+        if (!method_exists($user, 'can')) {
+            throw new Exception('Trying to use can() in a FormRequest and User is not using Bouncer traits.');
         }
 
         return $user->can($action, $entity);
@@ -32,7 +39,8 @@ trait Bounces
     /**
      * Get the current user by parsing the request Authentication header.
      *
-     * @return User
+     * @param bool $cached
+     * @return Authenticatable
      */
     public function getCurrentUser($cached = true)
     {

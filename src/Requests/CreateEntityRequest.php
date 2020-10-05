@@ -13,6 +13,6 @@ class CreateEntityRequest extends EntityRequest
      */
     public function authorize()
     {
-        return $this->can('create', $this->entity);
+        return $this->can('create', static::$entity);
     }
 }

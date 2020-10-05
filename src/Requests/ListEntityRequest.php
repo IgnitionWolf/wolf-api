@@ -8,11 +8,16 @@ namespace IgnitionWolf\API\Requests;
  */
 class ListEntityRequest extends EntityRequest
 {
+    public static $rules = [
+        'filter' => 'nullable|syntax:{*:[string]}',
+        'sort' => 'nullable|syntax:{field:string, order:ASC OR DESC}'
+    ];
+
     /**
      * {@inheritdoc}
      */
     public function authorize()
     {
-        return $this->can('list', $this->entity);
+        return $this->can('list', static::$entity);
     }
 }
