@@ -17,11 +17,11 @@ trait Bounces
      * Wrapper function to determine if an user can do a specific action.
      *
      * @param string $action
-     * @param string $entity
+     * @param string|object $entity
      * @return bool
      * @throws Exception
      */
-    public function can(string $action, string $entity): bool
+    public function can(string $action, $entity): bool
     {
         $user = $this->getCurrentUser();
 

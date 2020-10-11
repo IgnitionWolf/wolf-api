@@ -21,7 +21,7 @@ class BaseController extends Controller
      *
      * @param null|array|Model|IgnitionWolfModel $data
      * @param Transformer|array $transformer
-     * @return SuccessResponseBuilder
+     * @return \Illuminate\Http\JsonResponse
      */
     public function success($data = null, $transformer = null)
     {

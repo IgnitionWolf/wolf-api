@@ -95,10 +95,6 @@ class WolfAPIServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api');
 
         $this->app->register(ExceptionServiceProvider::class);
-
-        if ($this->app->runningInConsole() && $this->app->environment() === 'local') {
-            $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
-        }
     }
 
     /**

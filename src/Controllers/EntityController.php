@@ -40,10 +40,10 @@ abstract class EntityController extends BaseController
      * Create a entity.
      *
      * @param Request $request
-     * @return SuccessResponseBuilder
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function store(Request $request): SuccessResponseBuilder
+    public function store(Request $request): JsonResponse
     {
         RequestValidator::validate($request, static::$entity, 'create');
 
@@ -78,7 +78,7 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @param integer $id
-     * @return SuccessResponseBuilder
+     * @return JsonResponse
      * @throws EntityNotFoundException
      * @throws \Exception
      */
@@ -122,7 +122,7 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @param integer $id
-     * @return SuccessResponseBuilder
+     * @return JsonResponse
      * @throws EntityNotFoundException
      * @throws \Exception
      */
@@ -144,7 +144,7 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @param integer $id
-     * @return SuccessResponseBuilder
+     * @return JsonResponse
      * @throws EntityNotFoundException
      * @throws \Exception
      */
@@ -174,16 +174,20 @@ abstract class EntityController extends BaseController
          * Filter and sort the query
          */
         $filters = json_decode($request->get('filter', '[]'), true);
+
         $queryBuilder = $this->filterStrategy->filter($filters, static::$entity);
 
         if ($request->has('sort') && $sort = json_decode($request->get('sort'))) {
-            $queryBuilder = $queryBuilder->orderBy($sort->field, $sort->order);
+            $queryBuilder = is_string($queryBuilder)
+                ? $queryBuilder::orderBy($sort->field, $sort->order)
+                : $queryBuilder->orderBy($sort->field, $sort->order);
         }
 
         /**
          * Paginate and prepare the result
          */
-        $paginator = $queryBuilder->paginate((int) $request->get('limit', 10));
+        $limit = (int) $request->get('limit', 10);
+        $paginator = is_string($queryBuilder) ? $queryBuilder::paginate($limit) : $queryBuilder->paginate($limit);
         $adapter = new IlluminatePaginatorAdapter($paginator);
 
         $collection = $paginator->getCollection();
@@ -199,6 +203,7 @@ abstract class EntityController extends BaseController
      * @param Model $entity
      * @param array $data
      * @return void
+     * @throws \Exception
      */
     private function fillTranslatable(Model $entity, array &$data)
     {
@@ -209,6 +214,10 @@ abstract class EntityController extends BaseController
 
             // Make sure the translatable attribute changed, then unset and assign it again.
             if ($entity->$attribute !== $data[$attribute]) {
+                if (is_string($data[$attribute])) {
+                    throw new \Exception('You should pass an array to translatable fields.', 400);
+                }
+
                 unset($entity->$attribute);
                 $entity->setTranslations($attribute, $data[$attribute]);
                 unset($data[$attribute]);

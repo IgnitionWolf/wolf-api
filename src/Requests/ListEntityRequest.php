@@ -14,7 +14,7 @@ class ListEntityRequest extends EntityRequest
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authorize()
     {

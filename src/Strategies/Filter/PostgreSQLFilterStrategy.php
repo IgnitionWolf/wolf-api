@@ -12,7 +12,7 @@ use ReflectionException;
 class PostgreSQLFilterStrategy implements FilterStrategy
 {
     /**
-     * Filter using the Elastic Cache Plus package by babenkoivan.
+     * Filter using the PostgreSQL Scout driver package.
      *
      * The $filters structure is expected to look like this:
      * $filters => [
@@ -20,7 +20,7 @@ class PostgreSQLFilterStrategy implements FilterStrategy
      *      'sku' => ['SKU-123'],
      * ]
      *
-     * @url https://github.com/babenkoivan/elastic-scout-driver-plus
+     * @url https://github.com/pmatseykanets/laravel-scout-postgres
      * @param array $filters
      * @param string $context
      * @return Builder
@@ -34,7 +34,7 @@ class PostgreSQLFilterStrategy implements FilterStrategy
         if (!in_array(
             Searchable::class,
             array_keys($modelReflection->getTraits())
-        )) {
+        ) && sizeof($filters)) {
             throw new Exception('
                 The ' . $modelReflection->getShortName() . ' model needs the trait: Scout\Searchable.
             ');

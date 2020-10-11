@@ -64,7 +64,7 @@ class Handler extends ExceptionHandler
          * HttpException (laravel's exception)
          * Exception (PHP default exception)
          *
-         * We'll preparate the data accordingly.
+         * We'll prepare the data accordingly.
          */
         if ($exception instanceof BaseException) {
             $data['message'] = $exception->get(Payload::ARG_MESSAGE);
@@ -76,7 +76,9 @@ class Handler extends ExceptionHandler
             $data['statusCode'] = $exception->getStatusCode();
         } else {
             $data['message'] = $exception->getMessage();
-            $data['statusCode'] = Payload::$defaults[Payload::ARG_STATUS_CODE];
+            $data['statusCode'] = !empty($exception->getCode())
+                                    ? $exception->getCode()
+                                    : Payload::$defaults[Payload::ARG_STATUS_CODE];
             $data['code'] = Payload::$defaults[Payload::ARG_IDENTIFIER];
         }
 

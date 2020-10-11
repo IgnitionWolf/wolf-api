@@ -9,10 +9,13 @@ namespace IgnitionWolf\API\Requests;
 class UpdateEntityRequest extends EntityRequest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function authorize()
     {
-        return $this->can('update', $this->findEntity($this->route('id')));
+        // The route looks like this: /api/entity/{entity}, so the first and only param should be {entity}; the id.
+        $route = $this->route();
+        $id = $route->parameters()[$route->parameterNames()[0]];
+        return $this->can('update', $this->findEntity($id));
     }
 }

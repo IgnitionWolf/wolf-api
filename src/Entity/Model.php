@@ -28,12 +28,6 @@ class Model extends EloquentModel implements Transformable
     protected $translatable = [];
 
     /**
-     * Allowed attributes to be searched. This is to prevent non-indexed or non-expected searches.
-     * @var string[]
-     */
-    static $searchable = [];
-
-    /**
      * Get a transformer for the class.
      *
      * @return Transformer|string|callable

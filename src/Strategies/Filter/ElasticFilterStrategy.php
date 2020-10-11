@@ -11,7 +11,7 @@ use ReflectionException;
 class ElasticFilterStrategy implements FilterStrategy
 {
     /**
-     * Filter using the Elastic Cache package by babenkoivan.
+     * Filter using the Elastic Search Driver package by babenkoivan.
      *
      * The $filters structure is expected to look like this:
      * $filters => [
@@ -19,7 +19,7 @@ class ElasticFilterStrategy implements FilterStrategy
      *      'sku' => ['SKU-123'],
      * ]
      *
-     * @url https://github.com/babenkoivan/elastic-scout-driver-plus
+     * @url https://github.com/babenkoivan/elastic-scout-driver
      * @param array $filters
      * @param string $context class-string
      * @return Builder
@@ -33,10 +33,12 @@ class ElasticFilterStrategy implements FilterStrategy
         if (!in_array(
             Searchable::class,
             array_keys($modelReflection->getTraits())
-        )) {
+        ) && sizeof($filters)) {
             throw new Exception('
                 The ' . $modelReflection->getShortName() . ' model needs the trait: Scout\Searchable.
             ');
+        } elseif (!sizeof($filters)) {
+            return $context;
         }
 
         /**
