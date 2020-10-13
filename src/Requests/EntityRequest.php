@@ -84,4 +84,19 @@ abstract class EntityRequest extends FormRequest
     {
         throw new NotAuthorizedException;
     }
+
+    /**
+     * Helper function to extract the ID parameter from the route.
+     *
+     * @return int|null
+     */
+    public function extractIdFromRoute(): ?int
+    {
+        // The route looks like this: /api/entity/{entity}, so the first and only param should be {entity}; the id.
+        $route = $this->route();
+        if (isset($route->parameterNames()[0])) {
+            return (int) $route->parameters()[$route->parameterNames()[0]];
+        }
+        return null;
+    }
 }

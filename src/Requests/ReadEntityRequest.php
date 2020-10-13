@@ -13,9 +13,6 @@ class ReadEntityRequest extends EntityRequest
      */
     public function authorize()
     {
-        // The route looks like this: /api/entity/{entity}, so the first and only param should be {entity}; the id.
-        $route = $this->route();
-        $id = $route->parameters()[$route->parameterNames()[0]];
-        return $this->can('read', $id);
+        return $this->can('read', $this->findEntity($this->extractIdFromRoute()));
     }
 }

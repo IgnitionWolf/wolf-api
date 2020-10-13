@@ -26,4 +26,12 @@ class LoginRequest extends EntityRequest
     {
         return self::$rules;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function authorize()
+    {
+        return true;
+    }
 }

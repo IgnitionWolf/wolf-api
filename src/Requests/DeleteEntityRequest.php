@@ -13,9 +13,6 @@ class DeleteEntityRequest extends EntityRequest
      */
     public function authorize()
     {
-        // The route looks like this: /api/entity/{entity}, so the first and only param should be {entity}; the id.
-        $route = $this->route();
-        $id = $route->parameters()[$route->parameterNames()[0]];
-        return $this->can('delete', $this->findEntity($id));
+        return $this->can('delete', $this->findEntity($this->extractIdFromRoute()));
     }
 }

@@ -4,7 +4,6 @@ namespace IgnitionWolf\API\Strategies\Filter;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use ReflectionException;
 
@@ -22,7 +21,7 @@ class ElasticFilterStrategy implements FilterStrategy
      * @url https://github.com/babenkoivan/elastic-scout-driver
      * @param array $filters
      * @param string $context class-string
-     * @return Builder
+     * @return string|Builder
      * @throws ReflectionException
      * @throws Exception
      */
@@ -62,7 +61,11 @@ class ElasticFilterStrategy implements FilterStrategy
                 }
                 $searchQuery .= ")";
             } else {
-                $searchQuery .= "$key:($filterSet[0])";
+                if (is_numeric($filterSet[0])) {
+                    $searchQuery .= sprintf('%s:"%s"', $key, $filterSet[0]);
+                } else {
+                    $searchQuery .= "$key:($filterSet[0])";
+                }
             }
         }
 

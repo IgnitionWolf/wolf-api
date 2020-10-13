@@ -39,7 +39,7 @@ class AuthenticateController extends BaseController
 
     public function __construct(UserVerificationService $userVerification)
     {
-        $this->entity = config('api.user.model', \Modules\User\Entities\User::class);
+        $this->entity = config('api.user.model', User::class);
         $this->userVerification = $userVerification;
     }
 
@@ -47,9 +47,9 @@ class AuthenticateController extends BaseController
      * Register the user.
      *
      * @param Request $request
-     * @return SuccessResponseBuilder
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request): SuccessResponseBuilder
+    public function register(Request $request): \Illuminate\Http\JsonResponse
     {
         // This will call RegisterRequest
         RequestValidator::validate($request, $this->entity, 'register');
@@ -101,7 +101,8 @@ class AuthenticateController extends BaseController
      * Login the user by comparing passwords and providing a JWT token.
      *
      * @param Request $request
-     * @return SuccessResponseBuilder
+     * @return \Illuminate\Http\JsonResponse
+     * @throws FailedLoginException
      */
     public function login(Request $request)
     {
@@ -135,9 +136,9 @@ class AuthenticateController extends BaseController
     /**
      * Log out the user by invalidating the JWT token.
      *
-     * @return SuccessResponseBuilder
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function logout(): SuccessResponseBuilder
+    public function logout(): \Illuminate\Http\JsonResponse
     {
         $user = $this->getCurrentUser();
         JWTAuth::invalidate($user);
@@ -148,10 +149,10 @@ class AuthenticateController extends BaseController
     * Send the password reset link via e-mail.
     *
     * @param Request $request
-    * @throws EntityNotFoundException
-    * @return SuccessResponseBuilder
+    * @return \Illuminate\Http\JsonResponse
+     *@throws EntityNotFoundException
      */
-    public function recover(Request $request): SuccessResponseBuilder
+    public function recover(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $this->entity::where('email', $request->email)->first();
         if (!$user) {

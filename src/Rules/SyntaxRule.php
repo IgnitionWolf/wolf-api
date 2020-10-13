@@ -103,7 +103,11 @@ class SyntaxRule implements Rule
                     }
                 } elseif (str_contains($type, ' OR ')) {
                     if (!in_array(strtolower($value), explode(' or ', strtolower($type)))) {
-                        return false;
+                        foreach (explode(' OR ', strtolower($type)) as $innerType) {
+                            if (!$this->checkType($innerType, $value)) {
+                                return false;
+                            }
+                        }
                     }
                 }
                 break;

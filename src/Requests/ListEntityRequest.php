@@ -9,7 +9,7 @@ namespace IgnitionWolf\API\Requests;
 class ListEntityRequest extends EntityRequest
 {
     public static $rules = [
-        'filter' => 'nullable|syntax:{*:[string]}',
+        'filter' => 'nullable|syntax:{*:[string OR number]}',
         'sort' => 'nullable|syntax:{field:string, order:ASC OR DESC}'
     ];
 
