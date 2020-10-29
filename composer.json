@@ -21,13 +21,13 @@
     }],
     "require": {
         "php": "^7.3",
+        "ext-json": "*",
         "flugger/laravel-responder": "^3.1.2",
-        "ignitionwolf/wolf-api-docs": "dev-master",
         "laravel/scout": "^8.3",
+        "laravel/socialite": "^5.0",
         "nwidart/laravel-modules": "^8.0",
         "silber/bouncer": "1.0.0-rc.9",
-        "tymon/jwt-auth": "^1.0",
-        "ext-json": "*"
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",

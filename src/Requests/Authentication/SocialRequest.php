@@ -1,20 +1,20 @@
 <?php
 
-namespace IgnitionWolf\API\Requests;
+namespace IgnitionWolf\API\Requests\Authentication;
 
+use IgnitionWolf\API\Requests\EntityRequest;
 use Modules\User\Entities\User;
 
 /**
- * Handles basic validation for registering.
- * This should be extended and used to validate specific rules.
+ * Handles the validation for social authentication.
  */
-class LoginRequest extends EntityRequest
+class SocialRequest extends EntityRequest
 {
     protected static $entity = User::class;
 
     public static $rules = [
-        'email' => 'email:filter|required',
-        'password' => 'required'
+        'provider' => 'required|in:google,facebook,instagram',
+        'token' => 'required|string'
     ];
 
     /**

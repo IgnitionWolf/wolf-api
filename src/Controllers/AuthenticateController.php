@@ -3,7 +3,9 @@
 namespace IgnitionWolf\API\Controllers;
 
 use DateTime;
-use Illuminate\Foundation\Auth\User;
+use Exception;
+use IgnitionWolf\API\Exceptions\WrongLoginMethodException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Password;
@@ -14,6 +16,8 @@ use IgnitionWolf\API\Controllers\BaseController;
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
 use IgnitionWolf\API\Exceptions\FailedLoginException;
 use IgnitionWolf\API\Services\RequestValidator;
+use Laravel\Socialite\Facades\Socialite;
+use League\Fractal\Resource\Item;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 use IgnitionWolf\API\Services\UserVerificationService;
@@ -39,17 +43,47 @@ class AuthenticateController extends BaseController
 
     public function __construct(UserVerificationService $userVerification)
     {
-        $this->entity = config('api.user.model', User::class);
+        $this->entity = config('api.user.model');
         $this->userVerification = $userVerification;
+    }
+
+    /**
+     * Login or register the user via a third party.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function social(Request $request)
+    {
+        RequestValidator::validate($request, $this->entity, 'social');
+
+        $provider = $request->get('provider');
+        $token = $request->get('token');
+
+        $data = Socialite::driver($provider)->userFromToken($token);
+
+        if (!$user = $this->entity::where(['email' => $data->email])->first()) {
+            $user = new $this->entity;
+            $user->email = $data->email;
+            $user->name = $data->name;
+            $user->registration_source = $provider;
+            $user->save();
+        }
+
+        $token = JWTAuth::fromUser($user);
+
+        return $this->success(['token' => $token, 'user' => $user]);
     }
 
     /**
      * Register the user.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function register(Request $request): \Illuminate\Http\JsonResponse
+    public function register(Request $request): JsonResponse
     {
         // This will call RegisterRequest
         RequestValidator::validate($request, $this->entity, 'register');
@@ -101,8 +135,9 @@ class AuthenticateController extends BaseController
      * Login the user by comparing passwords and providing a JWT token.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws FailedLoginException
+     * @throws WrongLoginMethodException
      */
     public function login(Request $request)
     {
@@ -110,11 +145,17 @@ class AuthenticateController extends BaseController
         RequestValidator::validate($request, $this->entity, 'login');
 
         $credentials = $request->only('email', 'password');
+
+        $user = $this->entity::where(['email' => $credentials['email']])->first();
+        if ($user) {
+            if (!$user->password && $user->registration_source !== 'email') {
+                throw new WrongLoginMethodException;
+            }
+        }
+
         if (!$token = JWTAuth::attempt($credentials)) {
             throw new FailedLoginException;
         }
-
-        $user = User::where('email', $credentials['email'])->first();
 
         return $this->success(['token' => $token, 'user' => $user]);
     }
@@ -136,9 +177,9 @@ class AuthenticateController extends BaseController
     /**
      * Log out the user by invalidating the JWT token.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function logout(): \Illuminate\Http\JsonResponse
+    public function logout(): JsonResponse
     {
         $user = $this->getCurrentUser();
         JWTAuth::invalidate($user);
@@ -149,10 +190,10 @@ class AuthenticateController extends BaseController
     * Send the password reset link via e-mail.
     *
     * @param Request $request
-    * @return \Illuminate\Http\JsonResponse
+    * @return JsonResponse
      *@throws EntityNotFoundException
      */
-    public function recover(Request $request): \Illuminate\Http\JsonResponse
+    public function recover(Request $request): JsonResponse
     {
         $user = $this->entity::where('email', $request->email)->first();
         if (!$user) {

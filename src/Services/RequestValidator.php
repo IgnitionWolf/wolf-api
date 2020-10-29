@@ -97,6 +97,11 @@ class RequestValidator
         ));
 
         array_push($options, sprintf(
+            "IgnitionWolf\\API\\Requests\\Authentication\\%sRequest",
+            $action
+        ));
+
+        array_push($options, sprintf(
             "IgnitionWolf\\API\\Requests\\%sEntityRequest",
             $action
         ));

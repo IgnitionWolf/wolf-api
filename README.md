@@ -41,6 +41,12 @@ php artisan module:scout:flush [model name / "*" for all] [module / "*" for all]
 php artisan module:scout:import [model name / "*" for all] [module / "*" for all]
 ```
 
+### Laravel Socialite
+
+This package uses Socialite to interact with the social media providers to obtain data from an OAuth token, it is expected that you obtain this token in the front end and then pass it to the `api/auth/social` route. 
+
+Besides that, you need to add a `registration_source NOT NULL DEFAULT 'email'` column in your users table to determine if the user registered via social media or regular e-mail registration.   
+
 ### Laravel Modules
 
 ### Bouncer
