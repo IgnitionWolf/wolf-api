@@ -4,6 +4,8 @@ namespace IgnitionWolf\API\Controllers;
 
 use DateTime;
 use Exception;
+use Flugg\Responder\Facades\Transformation;
+use IgnitionWolf\API\Events\UserSocialRegistered;
 use IgnitionWolf\API\Exceptions\WrongLoginMethodException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,12 +14,10 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Mail\Message;
 
-use IgnitionWolf\API\Controllers\BaseController;
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
 use IgnitionWolf\API\Exceptions\FailedLoginException;
 use IgnitionWolf\API\Services\RequestValidator;
 use Laravel\Socialite\Facades\Socialite;
-use League\Fractal\Resource\Item;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 use IgnitionWolf\API\Services\UserVerificationService;
@@ -48,35 +48,6 @@ class AuthenticateController extends BaseController
     }
 
     /**
-     * Login or register the user via a third party.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function social(Request $request)
-    {
-        RequestValidator::validate($request, $this->entity, 'social');
-
-        $provider = $request->get('provider');
-        $token = $request->get('token');
-
-        $data = Socialite::driver($provider)->userFromToken($token);
-
-        if (!$user = $this->entity::where(['email' => $data->email])->first()) {
-            $user = new $this->entity;
-            $user->email = $data->email;
-            $user->name = $data->name;
-            $user->registration_source = $provider;
-            $user->save();
-        }
-
-        $token = JWTAuth::fromUser($user);
-
-        return $this->success(['token' => $token, 'user' => $user]);
-    }
-
-    /**
      * Register the user.
      *
      * @param Request $request
@@ -88,7 +59,7 @@ class AuthenticateController extends BaseController
         // This will call RegisterRequest
         RequestValidator::validate($request, $this->entity, 'register');
 
-        $password = Hash::make($request->password);
+        $password = Hash::make($request->get('password'));
 
         /**
          * @var Authenticatable
@@ -120,24 +91,13 @@ class AuthenticateController extends BaseController
     }
 
     /**
-     * Verify the user e-mail token.
-     *
-     * @param string $verificationCode
-     * @return SuccessResponseBuilder
-     */
-    public function verifyUser($verificationCode): SuccessResponseBuilder
-    {
-        $verification = $this->userVerification->verify($verificationCode);
-        return $this->success($verification);
-    }
-
-    /**
      * Login the user by comparing passwords and providing a JWT token.
      *
      * @param Request $request
      * @return JsonResponse
      * @throws FailedLoginException
      * @throws WrongLoginMethodException
+     * @throws Exception
      */
     public function login(Request $request)
     {
@@ -155,6 +115,45 @@ class AuthenticateController extends BaseController
 
         if (!$token = JWTAuth::attempt($credentials)) {
             throw new FailedLoginException;
+        }
+
+        if (method_exists($user, 'transformer') && $user->transformer()) {
+            $user = Transformation::make($user)->transform();
+        }
+
+        return $this->success(['token' => $token, 'user' => $user]);
+    }
+
+    /**
+     * Login or register the user via a third party.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function social(Request $request)
+    {
+        RequestValidator::validate($request, $this->entity, 'social');
+
+        $provider = $request->get('provider');
+        $token = $request->get('token');
+
+        $data = Socialite::driver($provider)->userFromToken($token);
+
+        if (!$user = $this->entity::where(['email' => $data->email])->first()) {
+            $user = new $this->entity;
+            $user->email = $data->email;
+            $user->name = $data->name;
+            $user->registration_source = $provider;
+            $user->save();
+
+            event(new UserSocialRegistered($user, $data));
+        }
+
+        $token = JWTAuth::fromUser($user);
+
+        if (method_exists($user, 'transformer') && $user->transformer()) {
+            $user = Transformation::make($user)->transform();
         }
 
         return $this->success(['token' => $token, 'user' => $user]);
@@ -205,5 +204,18 @@ class AuthenticateController extends BaseController
         });
 
         return $this->success();
+    }
+
+    /**
+     * Verify the user e-mail token.
+     *
+     * @param string $verificationCode
+     * @return SuccessResponseBuilder
+     * @throws \IgnitionWolf\API\Exceptions\VerificationCodeException
+     */
+    public function verifyUser($verificationCode): SuccessResponseBuilder
+    {
+        $verification = $this->userVerification->verify($verificationCode);
+        return $this->success($verification);
     }
 }

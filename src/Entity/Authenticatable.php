@@ -2,6 +2,8 @@
 
 namespace IgnitionWolf\API\Entity;
 
+use Flugg\Responder\Contracts\Transformable;
+use Flugg\Responder\Transformers\Transformer;
 use IgnitionWolf\API\Entity\Automap\Automapable;
 use IgnitionWolf\API\Traits\HasRelationships;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +11,7 @@ use Illuminate\Foundation\Auth\User;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Authenticatable extends User implements JWTSubject
+class Authenticatable extends User implements JWTSubject, Transformable
 {
     use Automapable;
     use SoftDeletes;
@@ -24,10 +26,14 @@ class Authenticatable extends User implements JWTSubject
     protected $map = [];
 
     /**
-     * Allowed searchable attributes.
-     * @var string[]
+     * Get a transformer for the class.
+     *
+     * @return Transformer|string|callable
      */
-    static $searchable = [];
+    public function transformer()
+    {
+        return null;
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
