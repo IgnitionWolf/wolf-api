@@ -32,6 +32,6 @@ return [
     */
     'user' => [
         'model' => \Modules\User\Entities\User::class,
-        'verifications' => true
+        'verifications' => false
     ]
 ];

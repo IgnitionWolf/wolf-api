@@ -31,7 +31,7 @@ abstract class EntityRequest extends FormRequest
      */
     public function rules()
     {
-        return $this->rules ?? [];
+        return static::$rules ?? [];
     }
 
     /**

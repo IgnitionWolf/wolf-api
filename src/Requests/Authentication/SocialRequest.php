@@ -10,12 +10,16 @@ use Modules\User\Entities\User;
  */
 class SocialRequest extends EntityRequest
 {
-    protected static $entity = User::class;
-
     public static $rules = [
         'provider' => 'required|in:google,facebook,instagram',
         'token' => 'required|string'
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+        static::$entity = config('api.user.model');
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -24,7 +28,7 @@ class SocialRequest extends EntityRequest
      */
     public function rules()
     {
-        return self::$rules;
+        return static::$rules;
     }
 
     /**

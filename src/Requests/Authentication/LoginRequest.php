@@ -11,12 +11,16 @@ use Modules\User\Entities\User;
  */
 class LoginRequest extends EntityRequest
 {
-    protected static $entity = User::class;
-
     public static $rules = [
         'email' => 'email:filter|required',
         'password' => 'required'
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+        static::$entity = config('api.user.model');
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -25,7 +29,7 @@ class LoginRequest extends EntityRequest
      */
     public function rules()
     {
-        return self::$rules;
+        return static::$rules;
     }
 
     /**

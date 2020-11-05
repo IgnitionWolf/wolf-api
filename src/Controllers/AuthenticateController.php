@@ -59,35 +59,40 @@ class AuthenticateController extends BaseController
         // This will call RegisterRequest
         RequestValidator::validate($request, $this->entity, 'register');
 
-        $password = Hash::make($request->get('password'));
-
         /**
          * @var Authenticatable
          */
-        $entity = new $this->entity;
+        $user = new $this->entity;
 
         /**
          * Fill the entity data
          */
-        $data = $request->only($entity->getFillable());
-        $entity->fill($data);
+        $data = $request->only($user->getFillable());
+        $user->fill($data);
 
-        if (method_exists($entity, 'automap')) {
-            $entity->automap();
+        if (method_exists($user, 'automap')) {
+            $user->automap();
         }
 
-        $entity->password = $password;
-        $entity->save();
+        $user->password = Hash::make($request->get('password'));
+        $user->save();
 
-        $relationshipData = $request->only($entity->getRelationships());
-        $entity->fillRelationships($relationshipData);
+        $relationshipData = $request->only($user->getRelationships());
+        $user->fillRelationships($relationshipData);
 
         if (config('api.user.verifications', true)) {
-            $this->userVerification->createToken($entity);
+            $this->userVerification->createToken($user);
         }
 
-        $entity->save();
-        return $this->success($entity);
+        $user->save();
+
+        $token = JWTAuth::fromUser($user);
+
+        if (method_exists($user, 'transformer') && $user->transformer()) {
+            $user = Transformation::make($user)->transform();
+        }
+
+        return $this->success(['token' => $token, 'user' => $user]);
     }
 
     /**
