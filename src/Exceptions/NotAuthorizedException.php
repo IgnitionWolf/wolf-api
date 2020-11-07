@@ -13,7 +13,7 @@ class NotAuthorizedException extends BaseException
     public function getPayload(): ExceptionPayload
     {
         return new ExceptionPayload([
-            ExceptionPayload::ARG_MESSAGE => 'You are not authorized to perform that action',
+            ExceptionPayload::ARG_MESSAGE => trans('api::exceptions.not_authorized'),
             ExceptionPayload::ARG_IDENTIFIER => 'NOT_AUTHORIZED',
             ExceptionPayload::ARG_STATUS_CODE => 401
         ]);

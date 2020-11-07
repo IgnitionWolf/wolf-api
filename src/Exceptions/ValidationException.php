@@ -22,7 +22,7 @@ class ValidationException extends BaseException
         }
 
         return new ExceptionPayload([
-            ExceptionPayload::ARG_MESSAGE => 'We found one or more errors after validating your request.',
+            ExceptionPayload::ARG_MESSAGE => trans('api::exceptions.validation'),
             ExceptionPayload::ARG_IDENTIFIER => 'VALIDATION_ERROR',
             ExceptionPayload::ARG_STATUS_CODE => 400,
             ExceptionPayload::ARG_META => ['errors' => $this->meta]

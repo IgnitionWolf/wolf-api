@@ -72,6 +72,8 @@ class WolfAPIServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/Routes/api.php');
             });
 
+        $this->loadTranslationsFrom(__DIR__.'/Resources/lang', 'api');
+
         $this->commands($this->commands);
 
         $this->registerRules($this->app, [

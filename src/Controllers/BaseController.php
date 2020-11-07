@@ -27,4 +27,15 @@ class BaseController extends Controller
     {
         return responder()->success($data ?? [], $transformer)->respond();
     }
+
+    /**
+     * Wrapper function to return a response with error.
+     *
+     * @param null|array|Model|IgnitionWolfModel $data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function error($data = null)
+    {
+        return responder()->error($data ?? [])->respond();
+    }
 }

@@ -13,7 +13,7 @@ class WrongLoginMethodException extends BaseException
     public function getPayload(): ExceptionPayload
     {
         return new ExceptionPayload([
-            ExceptionPayload::ARG_MESSAGE => 'You registered with a social media, you need to login using with it',
+            ExceptionPayload::ARG_MESSAGE => trans('api::exceptions.wrong_login'),
             ExceptionPayload::ARG_IDENTIFIER => 'AUTHENTICATION_METHOD_FAILURE',
             ExceptionPayload::ARG_STATUS_CODE => 401
         ]);

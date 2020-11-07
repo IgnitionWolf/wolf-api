@@ -13,7 +13,7 @@ class EntityNotFoundException extends BaseException
     public function getPayload(): ExceptionPayload
     {
         return new ExceptionPayload([
-            ExceptionPayload::ARG_MESSAGE => 'We could not find that entity',
+            ExceptionPayload::ARG_MESSAGE => trans('api::exceptions.entity_not_found'),
             ExceptionPayload::ARG_IDENTIFIER => 'ENTITY_NOT_FOUND',
             ExceptionPayload::ARG_STATUS_CODE => 404
         ]);

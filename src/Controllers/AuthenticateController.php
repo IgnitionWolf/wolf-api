@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use Flugg\Responder\Facades\Transformation;
 use IgnitionWolf\API\Events\UserSocialRegistered;
+use IgnitionWolf\API\Exceptions\VerificationCodeException;
 use IgnitionWolf\API\Exceptions\WrongLoginMethodException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -167,10 +168,9 @@ class AuthenticateController extends BaseController
     /**
      * Check if an user is logged in.
      *
-     * @param Request $request
-     * @return SuccessResponseBuilder|ErrorResponseBuilder
+     * @return JsonResponse
      */
-    public function check(Request $request)
+    public function check()
     {
         if ($user = $this->getCurrentUser()) {
             return $this->success($user);
@@ -215,10 +215,10 @@ class AuthenticateController extends BaseController
      * Verify the user e-mail token.
      *
      * @param string $verificationCode
-     * @return SuccessResponseBuilder
-     * @throws \IgnitionWolf\API\Exceptions\VerificationCodeException
+     * @return JsonResponse
+     * @throws VerificationCodeException
      */
-    public function verifyUser($verificationCode): SuccessResponseBuilder
+    public function verifyUser($verificationCode): JsonResponse
     {
         $verification = $this->userVerification->verify($verificationCode);
         return $this->success($verification);

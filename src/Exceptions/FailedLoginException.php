@@ -13,7 +13,7 @@ class FailedLoginException extends BaseException
     public function getPayload(): ExceptionPayload
     {
         return new ExceptionPayload([
-            ExceptionPayload::ARG_MESSAGE => 'Wrong password or email.',
+            ExceptionPayload::ARG_MESSAGE => trans('api::exceptions.failed_login'),
             ExceptionPayload::ARG_IDENTIFIER => 'AUTHENTICATION_FAILURE',
             ExceptionPayload::ARG_STATUS_CODE => 401
         ]);

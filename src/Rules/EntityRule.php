@@ -60,7 +60,7 @@ class EntityRule implements Rule
 
         Validator::replacer('entity', function ($message, $attribute, $rule, $parameters) {
             $entity = explode('/', $parameters[0]);
-            return "$entity[1] not found.";
+            return trans('api::validation.entity_not_found', ['entity' => $entity[1]]);
         });
     }
 }
