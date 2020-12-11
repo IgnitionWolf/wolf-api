@@ -6,9 +6,7 @@ use $PARENT_CLASS_NAMESPACE$;
 
 class $CLASS$ extends $PARENT_CLASS$
 {
-    protected static $entity;
-
-    public static $rules = [];
+    protected static string $entity;
 
     /**
      * Get the validation rules that apply to the request.
@@ -17,6 +15,8 @@ class $CLASS$ extends $PARENT_CLASS$
      */
     public function rules()
     {
-        return array_merge(self::$rules, []);
+        return array_merge(self::$rules, [
+            // Merge new rules here to support default filter/sort parameters.
+        ]);
     }
 }

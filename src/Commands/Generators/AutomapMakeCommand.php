@@ -57,7 +57,9 @@ class AutomapMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.automap.namespace') ?: $module->config('paths.generator.automap.namespace', 'Autmap');
+        return
+            $module->config('paths.generator.automap.namespace')
+            ?: $module->config('paths.generator.automap.namespace', 'Automap');
     }
 
     /**

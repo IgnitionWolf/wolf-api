@@ -3,6 +3,7 @@
 namespace IgnitionWolf\API\Services;
 
 use Exception;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use IgnitionWolf\API\Requests\EntityRequest;
 use Illuminate\Container\Container;
@@ -11,7 +12,7 @@ use ReflectionClass;
 /**
  * Static helper class to validate entity requests.
  */
-class RequestValidator
+class EntityRequestValidator
 {
     /**
      * Check if there is a FormRequest to handle this action.
@@ -19,13 +20,15 @@ class RequestValidator
      *
      * Naming Convention: Module\{Module}\Requests\{Action}{Model}
      *
+     * Returns the filtered and validated request.
+     *
      * @param Request $request The request to validate.
      * @param string $entity The entity name.
      * @param string $action The type of request (create/update, etc). Could be a FormRequest.
-     * @return void
+     * @return FormRequest
      * @throws Exception
      */
-    public static function validate(Request &$request, string $entity, string $action): void
+    public static function validate(Request &$request, string $entity, string $action): FormRequest
     {
         $formRequest = null;
         if (!class_exists($action)) {
@@ -44,7 +47,7 @@ class RequestValidator
             }
 
             if (!$formRequest) {
-                return;
+                return request();
             }
         } else {
             $formRequest = $action;
@@ -57,6 +60,7 @@ class RequestValidator
         }
 
         $request = app()->make($formRequest);
+        return $request;
     }
 
     /**

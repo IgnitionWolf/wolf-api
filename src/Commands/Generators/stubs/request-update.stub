@@ -6,7 +6,7 @@ use IgnitionWolf\API\Requests\UpdateEntityRequest;
 
 class $CLASS$ extends UpdateEntityRequest
 {
-    protected static $entity;
+    protected static string $entity;
 
     /**
      * Get the validation rules that apply to the request.

@@ -9,7 +9,7 @@ interface AutomapInterface
     /**
      * Automatically map an entity attribute.
      *
-     * @param \IgnitionWolf\API\Entity\Model $entity
+     * @param Model $entity
      * @param string $attribute
      * @return mixed
      */

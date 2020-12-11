@@ -29,6 +29,7 @@ trait HasRelationships
      * Similar to fill(), but for relationships.
      * This accepts an array with IDs.
      *
+     * @param array $relationshipData
      * @return void
      */
     public function fillRelationships(array $relationshipData): void
@@ -46,20 +47,24 @@ trait HasRelationships
                     continue;
                 }
 
-                if (($encoded = json_decode($data, true)) && !is_int((int) $encoded)) {
+                $encoded = is_array($data) ? $data : json_decode($data, true);
+                if ($encoded) {
                     // Handle model creation from array
                     $this->$relationship()->create($encoded);
                 } else {
                     // Handle IDs (i.e: 1 / 1,2)
                     $data = explode(',', $data);
 
-                    if (empty($data)) continue;
+                    if (empty($data)) {
+                        continue;
+                    }
 
                     // For example, belongsTo() doesn't support sync() because it's a single value, not multiple.
                     if (method_exists($this->$relationship(), 'sync')) {
                         $this->$relationship()->sync($data);
+                    } else {
+                        $this->$relationship()->associate($data[0]);
                     }
-                    else $this->$relationship()->associate($data[0]);
                 }
             }
         }

@@ -17,12 +17,12 @@ abstract class EntityRequest extends FormRequest
      * @psalm-var class-string
      * @var string
      */
-    protected static $entity;
+    protected static string $entity;
 
     /**
      * @var array
      */
-    public static $rules;
+    public static array $rules;
 
     /**
      * Get the validation rules that apply to the request.

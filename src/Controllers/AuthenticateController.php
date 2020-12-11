@@ -152,8 +152,6 @@ class AuthenticateController extends BaseController
             $user->name = $data->name;
             $user->registration_source = $provider;
             $user->save();
-
-            event(new UserSocialRegistered($user, $data));
         }
 
         $token = JWTAuth::fromUser($user);

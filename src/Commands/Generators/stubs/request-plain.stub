@@ -6,7 +6,7 @@ use $PARENT_CLASS_NAMESPACE$;
 
 class $CLASS$ extends $PARENT_CLASS$
 {
-    protected static $entity;
+    protected static string $entity;
 
     /**
      * Get the validation rules that apply to the request.
@@ -25,6 +25,6 @@ class $CLASS$ extends $PARENT_CLASS$
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 }

@@ -1,3 +1,4 @@
+
 # WolfAPI
 
 This package converts your Laravel application to an API; it bundles by default all the necessary features to work as an API service.

@@ -3,72 +3,55 @@
 namespace IgnitionWolf\API\Controllers;
 
 use IgnitionWolf\API\Entity\Model;
-use IgnitionWolf\API\Events\EntityCreated;
-use IgnitionWolf\API\Events\EntityPreCreate;
-use IgnitionWolf\API\Events\EntityUpdated;
+use Exception;
 
-use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
 use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
-use IgnitionWolf\API\Services\RequestValidator;
-use Laravel\Scout\Searchable;
+use IgnitionWolf\API\Services\EntityRequestValidator;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 abstract class EntityController extends BaseController
 {
+    use WithHooks;
+
     /**
      * Points to the entity to be handled in the controller.
      *
      * @psalm-var class-string
-     * @var Model
+     * @var string
      */
-    protected static $entity;
-
-    /**
-     * @var FilterStrategy
-     */
-    protected $filterStrategy;
-
-    public function __construct(FilterStrategy $filterStrategy) {
-        $this->filterStrategy = $filterStrategy;
-    }
+    protected static string $entity;
 
     /**
      * Create a entity.
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(Request $request): JsonResponse
     {
-        RequestValidator::validate($request, static::$entity, 'create');
+        $request = EntityRequestValidator::validate($request, static::$entity, 'create');
+        $validAttributes = $request->validated();
 
-        /**
-         * @var Model
-         */
         $entity = new static::$entity;
 
-        /**
-         * Fill the entity data
-         */
-        $data = $request->only($entity->getFillable());
-        $entity->fill($data);
+        $entity->fill($validAttributes);
 
         if (method_exists($entity, 'automap')) {
             $entity->automap();
         }
 
-        event(new EntityPreCreate($entity, $request));
+        $entity->fillRelationships($request->only(
+            array_intersect($entity->getRelationships(), array_keys($validAttributes))
+        ));
 
-        $relationshipData = $request->only($entity->getRelationships());
-        $entity->fillRelationships($relationshipData);
+        $this->onPreCreate($request, $entity);
         $entity->save();
-
-        event(new EntityCreated($entity, $request));
+        $this->onPostCreate($request, $entity);
 
         return $this->success($entity);
     }
@@ -80,20 +63,19 @@ abstract class EntityController extends BaseController
      * @param integer $id
      * @return JsonResponse
      * @throws EntityNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(Request $request, int $id)
     {
-        RequestValidator::validate($request, static::$entity, 'update');
+        EntityRequestValidator::validate($request, static::$entity, 'update');
+        $validAttributes = $request->validated();
 
-        /**
-         * Update the Entity
-         */
-        if (!$entity = static::$entity::find($id)) {
+        $model = app()->make(static::$entity);
+        if (!$entity = $model->find($id)) {
             throw new EntityNotFoundException;
         }
 
-        $data = $request->only($entity->getFillable());
+        $data = $entity->fill($validAttributes);
 
         if (method_exists($entity, 'translate')) {
             $this->fillTranslatable($entity, $data);
@@ -105,14 +87,10 @@ abstract class EntityController extends BaseController
             $entity->automap();
         }
 
-        $relationshipData = $request->only($entity->getRelationships());
-        $entity->fillRelationships($relationshipData);
+        $entity->fillRelationships($request->only(
+            array_intersect($entity->getRelationships(), array_keys($validAttributes))
+        ));
         $entity->save();
-
-        /**
-         * Dispatch events
-         */
-        event(new EntityUpdated($entity));
 
         return $this->success($entity);
     }
@@ -124,13 +102,14 @@ abstract class EntityController extends BaseController
      * @param integer $id
      * @return JsonResponse
      * @throws EntityNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Request $request, $id)
     {
-        RequestValidator::validate($request, static::$entity, 'delete');
+        EntityRequestValidator::validate($request, static::$entity, 'delete');
 
-        if (!$entity = static::$entity::find($id)) {
+        $model = app()->make(static::$entity);
+        if (!$entity = $model->find($id)) {
             throw new EntityNotFoundException;
         }
 
@@ -146,13 +125,14 @@ abstract class EntityController extends BaseController
      * @param integer $id
      * @return JsonResponse
      * @throws EntityNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
-        RequestValidator::validate($request, static::$entity, 'read');
+        EntityRequestValidator::validate($request, static::$entity, 'read');
 
-        if (!$entity = static::$entity::find($id)) {
+        $model = app()->make(static::$entity);
+        if (!$entity = $model->find($id)) {
             throw new EntityNotFoundException();
         }
 
@@ -164,18 +144,18 @@ abstract class EntityController extends BaseController
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request)
     {
-        RequestValidator::validate($request, static::$entity, 'list');
+        EntityRequestValidator::validate($request, static::$entity, 'list');
 
         /**
          * Filter and sort the query
          */
         $filters = json_decode($request->get('filter', '[]'), true);
 
-        $queryBuilder = $this->filterStrategy->filter($filters, static::$entity);
+        $queryBuilder = app()->make(FilterStrategy::class)->filter($filters, static::$entity);
 
         if ($request->has('sort') && $sort = json_decode($request->get('sort'))) {
             $queryBuilder = is_string($queryBuilder)
@@ -203,7 +183,7 @@ abstract class EntityController extends BaseController
      * @param Model $entity
      * @param array $data
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function fillTranslatable(Model $entity, array &$data)
     {
@@ -215,7 +195,7 @@ abstract class EntityController extends BaseController
             // Make sure the translatable attribute changed, then unset and assign it again.
             if ($entity->$attribute !== $data[$attribute]) {
                 if (is_string($data[$attribute])) {
-                    throw new \Exception('You should pass an array to translatable fields.', 400);
+                    throw new Exception('You should pass an array to translatable fields.', 400);
                 }
 
                 unset($entity->$attribute);

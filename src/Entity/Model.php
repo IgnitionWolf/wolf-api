@@ -34,6 +34,8 @@ class Model extends EloquentModel implements Transformable
      */
     public function transformer()
     {
-        return null;
+        return function() {
+            return $this->toArray();
+        };
     }
 }
