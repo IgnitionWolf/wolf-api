@@ -3,16 +3,10 @@
 namespace IgnitionWolf\API\Traits;
 
 use Exception;
-use IgnitionWolf\API\Entity\Authenticatable;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 trait Bounces
 {
-    /**
-     * Cache current user in memory.
-     */
-    protected $currentUser;
-
     /**
      * Wrapper function to determine if an user can do a specific action.
      *
@@ -37,17 +31,10 @@ trait Bounces
     }
 
     /**
-     * Get the current user by parsing the request Authentication header.
-     *
-     * @param bool $cached
      * @return Authenticatable
      */
-    public function getCurrentUser($cached = true)
+    public function getCurrentUser(): Authenticatable
     {
-        if (!$this->currentUser || !$cached) {
-            $this->currentUser = JWTAuth::parseToken()->toUser();
-        }
-
-        return $this->currentUser;
+        return auth()->user();
     }
 }

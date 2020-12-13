@@ -104,7 +104,7 @@ abstract class EntityController extends BaseController
      * @throws EntityNotFoundException
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id): JsonResponse
     {
         EntityRequestValidator::validate($request, static::$entity, 'delete');
 
@@ -127,7 +127,7 @@ abstract class EntityController extends BaseController
      * @throws EntityNotFoundException
      * @throws Exception
      */
-    public function show(Request $request, int $id)
+    public function show(Request $request, int $id): JsonResponse
     {
         EntityRequestValidator::validate($request, static::$entity, 'read');
 
@@ -146,7 +146,7 @@ abstract class EntityController extends BaseController
      * @return JsonResponse
      * @throws Exception
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         EntityRequestValidator::validate($request, static::$entity, 'list');
 
@@ -187,6 +187,10 @@ abstract class EntityController extends BaseController
      */
     private function fillTranslatable(Model $entity, array &$data)
     {
+        if (!method_exists($entity, 'getTranslatableAttributes')) {
+            return;
+        }
+
         foreach ($entity->getTranslatableAttributes() as $attribute) {
             if (!isset($data[$attribute]) || empty($data[$attribute])) {
                 continue;

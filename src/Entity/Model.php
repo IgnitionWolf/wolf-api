@@ -18,14 +18,16 @@ class Model extends EloquentModel implements Transformable
      *
      * @var array
      */
-    protected $map = [];
+    protected array $map = [];
 
     /**
-     * Translations (support for spatie/translatable)
+     * Translations (support for spatie/translatable).
+     *
+     * TODO: Deprecate this
      *
      * @var string[]
      */
-    protected $translatable = [];
+    protected array $translatable = [];
 
     /**
      * Get a transformer for the class.
@@ -34,7 +36,7 @@ class Model extends EloquentModel implements Transformable
      */
     public function transformer()
     {
-        return function() {
+        return function () {
             return $this->toArray();
         };
     }

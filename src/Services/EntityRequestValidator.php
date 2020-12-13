@@ -11,6 +11,8 @@ use ReflectionClass;
 
 /**
  * Static helper class to validate entity requests.
+ *
+ * Convert into a Facade
  */
 class EntityRequestValidator
 {
@@ -47,7 +49,7 @@ class EntityRequestValidator
             }
 
             if (!$formRequest) {
-                return request();
+                throw new Exception("Trying to validate $action on $entity but the FormRequest doesn't exist.");
             }
         } else {
             $formRequest = $action;
@@ -64,7 +66,9 @@ class EntityRequestValidator
     }
 
     /**
-     * Get a list of possible form request. It fallsback by index order.
+     * Get a list of possible form request. It fallbacks by index order.
+     *
+     * TODO: Improve this
      *
      * @param string $namespace
      * @param string $entity

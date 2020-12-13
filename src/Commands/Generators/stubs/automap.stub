@@ -12,7 +12,7 @@ class $CLASS$ implements AutomapInterface
      *
      * @param Model $entity
      * @param string $attribute
-     * @return mixed
+     * @return void
      */
     public function map(Model $entity, string $attribute)
     {

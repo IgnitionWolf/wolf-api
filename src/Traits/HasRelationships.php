@@ -13,7 +13,7 @@ trait HasRelationships
      *
      * @var array
      */
-    protected $relationships = [];
+    protected array $relationships = [];
 
     /**
      * Get the relationships array list.

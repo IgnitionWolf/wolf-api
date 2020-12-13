@@ -19,8 +19,8 @@ class BaseController extends Controller
     /**
      * Wrapper function to return a successful response.
      *
-     * @param null|array|Model|IgnitionWolfModel $data
-     * @param Transformer|array $transformer
+     * @param null|object|array|Model|IgnitionWolfModel $data
+     * @param class-string $transformer
      * @return \Illuminate\Http\JsonResponse
      */
     public function success($data = null, $transformer = null)
