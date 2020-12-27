@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Requests;
+namespace IgnitionWolf\API\Http\Requests;
 
 /**
  * Handles authorization for updating entities requests.
@@ -11,8 +11,8 @@ class UpdateEntityRequest extends EntityRequest
     /**
      * @inheritdoc
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->can('update', $this->findEntity($this->extractIdFromRoute()));
+        return $this->can('update', $this->find($this->idFromRoute()));
     }
 }

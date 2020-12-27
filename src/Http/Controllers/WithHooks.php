@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Controllers;
+namespace IgnitionWolf\API\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

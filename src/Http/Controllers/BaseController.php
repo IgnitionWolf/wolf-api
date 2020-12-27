@@ -1,14 +1,10 @@
 <?php
 
-namespace IgnitionWolf\API\Controllers;
+namespace IgnitionWolf\API\Http\Controllers;
 
 use IgnitionWolf\API\Traits\Bounces;
-use Flugg\Responder\Facades\Responder;
-use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
-use Flugg\Responder\Transformers\Transformer;
-use IgnitionWolf\API\Services\RequestValidator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use League\Fractal\Resource\Item;
 use Illuminate\Database\Eloquent\Model;
 use IgnitionWolf\API\Entity\Model as IgnitionWolfModel;
 
@@ -21,9 +17,9 @@ class BaseController extends Controller
      *
      * @param null|object|array|Model|IgnitionWolfModel $data
      * @param class-string $transformer
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function success($data = null, $transformer = null)
+    public function success($data = null, $transformer = null): JsonResponse
     {
         return responder()->success($data ?? [], $transformer)->respond();
     }
@@ -31,11 +27,12 @@ class BaseController extends Controller
     /**
      * Wrapper function to return a response with error.
      *
+     * @param string $code
      * @param null|array|Model|IgnitionWolfModel $data
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function error($data = null)
+    public function error($code = '', $data = []): JsonResponse
     {
-        return responder()->error($data ?? [])->respond();
+        return responder()->error($code, $data ?? [])->respond();
     }
 }

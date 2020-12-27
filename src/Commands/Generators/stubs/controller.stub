@@ -2,7 +2,7 @@
 
 namespace $CLASS_NAMESPACE$;
 
-use IgnitionWolf\API\Controllers\BaseController;
+use IgnitionWolf\API\Http\Controllers\BaseController;
 
 class $CLASS$ extends BaseController
 {

@@ -2,9 +2,9 @@
 
 namespace $CLASS_NAMESPACE$;
 
-use IgnitionWolf\API\Controllers\EntityController;
+use IgnitionWolf\API\Http\Controllers\EntityController;
 
 class $CLASS$ extends EntityController
 {
-    protected static string $entity;
+    protected static string $model;
 }

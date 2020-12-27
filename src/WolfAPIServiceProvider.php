@@ -8,11 +8,10 @@ use IgnitionWolf\API\Commands\Generators\RequestMakeCommand;
 use IgnitionWolf\API\Commands\Generators\ScoutFlushCommand;
 use IgnitionWolf\API\Commands\Generators\ScoutImportCommand;
 use IgnitionWolf\API\Commands\Generators\TransformerMakeCommand;
-use IgnitionWolf\API\Middleware\DebugParameter;
+use IgnitionWolf\API\Http\Middleware\DebugParameter;
 use IgnitionWolf\API\Rules\EntityRule;
 use IgnitionWolf\API\Rules\SyntaxRule;
 use IgnitionWolf\API\Strategies\Filter\ElasticFilterStrategy;
-use IgnitionWolf\API\Strategies\Filter\EloquentFilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\PostgreSQLFilterStrategy;
 use Illuminate\Contracts\Foundation\Application;
@@ -67,7 +66,7 @@ class WolfAPIServiceProvider extends ServiceProvider
 
         Route::prefix('api')
             ->middleware('api')
-            ->namespace('IgnitionWolf\API\Controllers')
+            ->namespace('IgnitionWolf\API\Http\Controllers')
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__.'/Routes/api.php');
             });

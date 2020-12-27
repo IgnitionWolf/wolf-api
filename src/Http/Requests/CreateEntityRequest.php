@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Requests;
+namespace IgnitionWolf\API\Http\Requests;
 
 /**
  * Handles authorization for creating entities requests.
@@ -11,8 +11,8 @@ class CreateEntityRequest extends EntityRequest
     /**
      * {@inheritdoc}
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->can('create', static::$entity);
+        return $this->can('create', static::$model);
     }
 }

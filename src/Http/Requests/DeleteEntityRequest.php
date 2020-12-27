@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Requests;
+namespace IgnitionWolf\API\Http\Requests;
 
 /**
  * Handles authorization for deleting entities requests.
@@ -11,8 +11,8 @@ class DeleteEntityRequest extends EntityRequest
     /**
      * @inheritdoc
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->can('delete', $this->findEntity($this->extractIdFromRoute()));
+        return $this->can('delete', $this->find($this->idFromRoute()));
     }
 }

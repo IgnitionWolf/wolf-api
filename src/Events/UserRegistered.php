@@ -3,20 +3,21 @@
 namespace IgnitionWolf\API\Events;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserSocialRegistered
+class UserRegistered
 {
-    use SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /**
      * @var Model
      */
-    public $user;
+    public Model $user;
 
     /**
      * Data provided by the 3rd party registration provider.
-     * @var array
+     * @var object
      */
     public $providerData;
 
@@ -25,7 +26,7 @@ class UserSocialRegistered
      * @param Model $model
      * @param $providerData
      */
-    public function __construct(Model $model, $providerData)
+    public function __construct(Model $model, $providerData = null)
     {
         $this->user = $model;
         $this->providerData = $providerData;

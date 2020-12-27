@@ -5,8 +5,10 @@ namespace IgnitionWolf\API\Exceptions\Core;
 use Exception;
 use Flugg\Responder\Facades\Responder;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use IgnitionWolf\API\Exceptions\Core\ExceptionPayload as Payload;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +32,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
+     * @param Throwable $exception
      * @return void
      *
      * @throws \Exception
@@ -43,9 +45,11 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @param Throwable $exception
+     * @return Response
+     * @throws Exception
+     * @throws Throwable
      */
     public function render($request, Throwable $exception)
     {
@@ -115,7 +119,7 @@ class Handler extends ExceptionHandler
      * @throws Throwable
      * @return void
      */
-    private static function intercept(\Throwable $exception)
+    private static function intercept(Throwable $exception)
     {
         $bridge = App::make(ExceptionBridge::class);
         $bridge->intercept($exception);

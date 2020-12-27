@@ -1,8 +1,8 @@
 <?php
 
-namespace IgnitionWolf\API\Requests\Authentication;
+namespace IgnitionWolf\API\Http\Requests\Authentication;
 
-use IgnitionWolf\API\Requests\EntityRequest;
+use IgnitionWolf\API\Http\Requests\EntityRequest;
 use Modules\User\Entities\User;
 
 /**
@@ -10,7 +10,7 @@ use Modules\User\Entities\User;
  */
 class SocialRequest extends EntityRequest
 {
-    public static $rules = [
+    public static array $rules = [
         'provider' => 'required|in:google,facebook,instagram',
         'token' => 'required|string'
     ];
@@ -18,7 +18,7 @@ class SocialRequest extends EntityRequest
     public function __construct()
     {
         parent::__construct();
-        static::$entity = config('api.user.model');
+        static::$model = config('api.user.model');
     }
 
     /**
@@ -26,7 +26,7 @@ class SocialRequest extends EntityRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return static::$rules;
     }
@@ -34,7 +34,7 @@ class SocialRequest extends EntityRequest
     /**
      * @inheritDoc
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }

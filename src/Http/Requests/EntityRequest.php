@@ -1,13 +1,14 @@
 <?php
 
-namespace IgnitionWolf\API\Requests;
+namespace IgnitionWolf\API\Http\Requests;
 
 use Exception;
+use IgnitionWolf\API\Exceptions\NotAuthorizedException;
 use IgnitionWolf\API\Exceptions\ValidationException;
 use IgnitionWolf\API\Traits\Bounces;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use IgnitionWolf\API\Exceptions\NotAuthorizedException;
+use IgnitionWolf\API\Exceptions\NotAuthenticatedException;
 
 abstract class EntityRequest extends FormRequest
 {
@@ -17,11 +18,8 @@ abstract class EntityRequest extends FormRequest
      * @psalm-var class-string
      * @var string
      */
-    protected static string $entity;
+    protected static string $model;
 
-    /**
-     * @var array
-     */
     public static array $rules;
 
     /**
@@ -29,7 +27,7 @@ abstract class EntityRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return static::$rules ?? [];
     }
@@ -40,7 +38,7 @@ abstract class EntityRequest extends FormRequest
      * @throws Exception
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return false;
     }
@@ -51,21 +49,40 @@ abstract class EntityRequest extends FormRequest
      * @return mixed
      * @throws Exception
      */
-    public function findEntity(?int $id)
+    public function find(?int $id)
     {
-        if (!static::$entity) {
-            throw new Exception('Tried to call findEntity() but the $entity has not been assigned yet.');
+        if (!static::$model) {
+            throw new Exception('Tried to call find() but the $model has not been assigned yet.');
         }
 
-        return static::$entity::find($id);
+        $model = app()->make(static::$model);
+        if (!$model) {
+            throw new Exception('Failed to instantiate ' . static::$model);
+        }
+
+        return $model::find($id);
+    }
+
+    /**
+     * Helper function to extract the ID parameter from the route.
+     *
+     * @return int|null
+     */
+    public function idFromRoute(): ?int
+    {
+        // The route looks like this: /api/entity/{entity}, so the first and only param should be {entity}; the id.
+        $route = $this->route();
+        if (isset($route->parameterNames()[0])) {
+            return (int) $route->parameters()[$route->parameterNames()[0]];
+        }
+        return null;
     }
 
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param Validator $validator
      * @return void
-     *
      * @throws ValidationException
      */
     protected function failedValidation(Validator $validator)
@@ -77,26 +94,10 @@ abstract class EntityRequest extends FormRequest
      * Handle a failed authorization attempt.
      *
      * @return void
-     *
-     * @throws NotAuthorizedException
+     * @throws NotAuthenticatedException|NotAuthorizedException
      */
     protected function failedAuthorization()
     {
-        throw new NotAuthorizedException;
-    }
-
-    /**
-     * Helper function to extract the ID parameter from the route.
-     *
-     * @return int|null
-     */
-    public function extractIdFromRoute(): ?int
-    {
-        // The route looks like this: /api/entity/{entity}, so the first and only param should be {entity}; the id.
-        $route = $this->route();
-        if (isset($route->parameterNames()[0])) {
-            return (int) $route->parameters()[$route->parameterNames()[0]];
-        }
-        return null;
+        throw new NotAuthorizedException();
     }
 }

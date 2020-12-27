@@ -31,9 +31,9 @@ trait Bounces
     }
 
     /**
-     * @return Authenticatable
+     * @return Authenticatable|null
      */
-    public function getCurrentUser(): Authenticatable
+    public function getCurrentUser(): ?Authenticatable
     {
         return auth()->user();
     }

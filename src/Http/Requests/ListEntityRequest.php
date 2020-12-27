@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Requests;
+namespace IgnitionWolf\API\Http\Requests;
 
 /**
  * Handles authorization for listing entities.
@@ -8,7 +8,7 @@ namespace IgnitionWolf\API\Requests;
  */
 class ListEntityRequest extends EntityRequest
 {
-    public static $rules = [
+    public static array $rules = [
         'filter' => 'nullable|syntax:{*:[string OR number]}',
         'sort' => 'nullable|syntax:{field:string, order:ASC OR DESC}'
     ];
@@ -16,8 +16,8 @@ class ListEntityRequest extends EntityRequest
     /**
      * @inheritdoc
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->can('list', static::$entity);
+        return $this->can('list', static::$model);
     }
 }

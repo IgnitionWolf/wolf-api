@@ -6,14 +6,14 @@ use $PARENT_CLASS_NAMESPACE$;
 
 class $CLASS$ extends $PARENT_CLASS$
 {
-    protected static string $entity;
+    protected static string $model;
 
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [];
     }
@@ -23,7 +23,7 @@ class $CLASS$ extends $PARENT_CLASS$
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return false;
     }

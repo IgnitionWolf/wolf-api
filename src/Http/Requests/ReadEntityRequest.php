@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Requests;
+namespace IgnitionWolf\API\Http\Requests;
 
 /**
  * Handles authorization for reading entities requests.
@@ -11,8 +11,8 @@ class ReadEntityRequest extends EntityRequest
     /**
      * @inheritdoc
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->can('read', $this->findEntity($this->extractIdFromRoute()));
+        return $this->can('read', $this->find($this->idFromRoute()));
     }
 }

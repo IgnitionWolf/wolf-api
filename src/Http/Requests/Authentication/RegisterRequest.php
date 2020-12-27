@@ -1,8 +1,8 @@
 <?php
 
-namespace IgnitionWolf\API\Requests\Authentication;
+namespace IgnitionWolf\API\Http\Requests\Authentication;
 
-use IgnitionWolf\API\Requests\EntityRequest;
+use IgnitionWolf\API\Http\Requests\EntityRequest;
 use Modules\User\Entities\User;
 
 /**
@@ -11,7 +11,7 @@ use Modules\User\Entities\User;
  */
 class RegisterRequest extends EntityRequest
 {
-    public static $rules = [
+    public static array $rules = [
         'email' => 'email:filter|unique:users,email|required',
         'password' => 'required'
     ];
@@ -19,16 +19,6 @@ class RegisterRequest extends EntityRequest
     public function __construct()
     {
         parent::__construct();
-        static::$entity = config('api.user.model');
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return static::$rules;
+        static::$model = config('api.user.model');
     }
 }

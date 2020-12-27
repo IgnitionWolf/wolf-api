@@ -2,6 +2,8 @@
 
 namespace IgnitionWolf\API\Entity\Automap;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
+
 /**
  * Make an entity auto-mapable, this allows automatic data assignment upon creation.
  */
@@ -12,8 +14,9 @@ trait Automapable
      *
      * @param array $attributes
      * @return self
+     * @throws BindingResolutionException
      */
-    public function automap(array $attributes = [])
+    public function automap(array $attributes = []): self
     {
         if (!isset($this->map)) {
             return $this;
@@ -26,7 +29,7 @@ trait Automapable
                 }
             }
 
-            $transformer = new $value;
+            $transformer = app()->make($value);
             $transformer->map($this, $index);
         }
 

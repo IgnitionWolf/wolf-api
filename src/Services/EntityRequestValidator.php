@@ -5,7 +5,7 @@ namespace IgnitionWolf\API\Services;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
-use IgnitionWolf\API\Requests\EntityRequest;
+use IgnitionWolf\API\Http\Requests\EntityRequest;
 use Illuminate\Container\Container;
 use ReflectionClass;
 
@@ -30,7 +30,7 @@ class EntityRequestValidator
      * @return FormRequest
      * @throws Exception
      */
-    public static function validate(Request &$request, string $entity, string $action): FormRequest
+    public static function validate(Request $request, string $entity, string $action): FormRequest
     {
         $formRequest = null;
         if (!class_exists($action)) {
@@ -68,8 +68,6 @@ class EntityRequestValidator
     /**
      * Get a list of possible form request. It fallbacks by index order.
      *
-     * TODO: Improve this
-     *
      * @param string $namespace
      * @param string $entity
      * @param string $action
@@ -77,44 +75,37 @@ class EntityRequestValidator
      */
     public static function getPossibleRequests(string $namespace, string $entity, string $action): array
     {
-        $options = [];
-
-        array_push($options, sprintf(
-            "%s\\Http\\Requests\\%s%sRequest",
-            $namespace,
-            $action,
-            $entity
-        ));
-
-        array_push($options, sprintf(
-            "%s\\Http\\Requests\\%sRequest",
-            $namespace,
-            $action,
-        ));
-
-        array_push($options, sprintf(
-            "%s\\Http\\Requests\\%s\\%sRequest",
-            $namespace,
-            $entity,
-            $action
-        ));
-
-        array_push($options, sprintf(
-            "IgnitionWolf\\API\\Requests\\%sRequest",
-            $action
-        ));
-
-        array_push($options, sprintf(
-            "IgnitionWolf\\API\\Requests\\Authentication\\%sRequest",
-            $action
-        ));
-
-        array_push($options, sprintf(
-            "IgnitionWolf\\API\\Requests\\%sEntityRequest",
-            $action
-        ));
-
-        return $options;
+        return [
+            sprintf(
+                "%s\\Http\\Requests\\%s%sRequest",
+                $namespace,
+                $action,
+                $entity
+            ),
+            sprintf(
+                "%s\\Http\\Requests\\%sRequest",
+                $namespace,
+                $action,
+            ),
+            sprintf(
+                "%s\\Http\\Requests\\%s\\%sRequest",
+                $namespace,
+                $entity,
+                $action
+            ),
+            sprintf(
+                "IgnitionWolf\\API\\Http\\Requests\\%sRequest",
+                $action
+            ),
+            sprintf(
+                "IgnitionWolf\\API\\Http\\Requests\\Authentication\\%sRequest",
+                $action
+            ),
+            sprintf(
+                "IgnitionWolf\\API\\Http\\Requests\\%sEntityRequest",
+                $action
+            )
+        ];
     }
 
     /**
@@ -122,7 +113,7 @@ class EntityRequestValidator
      * @param string $class
      * @return string
      */
-    public static function getNamespace($class): string
+    public static function getNamespace(string $class): string
     {
         if (strpos($class, 'Modules\\') !== false) {
             return substr($class, 0, strpos($class, '\\', 9));

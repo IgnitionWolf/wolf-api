@@ -2,12 +2,12 @@
 
 namespace IgnitionWolf\API\Commands\Generators;
 
-use IgnitionWolf\API\Requests\CreateEntityRequest;
-use IgnitionWolf\API\Requests\DeleteEntityRequest;
-use IgnitionWolf\API\Requests\EntityRequest;
-use IgnitionWolf\API\Requests\ListEntityRequest;
-use IgnitionWolf\API\Requests\ReadEntityRequest;
-use IgnitionWolf\API\Requests\UpdateEntityRequest;
+use IgnitionWolf\API\Http\Requests\CreateEntityRequest;
+use IgnitionWolf\API\Http\Requests\DeleteEntityRequest;
+use IgnitionWolf\API\Http\Requests\EntityRequest;
+use IgnitionWolf\API\Http\Requests\ListEntityRequest;
+use IgnitionWolf\API\Http\Requests\ReadEntityRequest;
+use IgnitionWolf\API\Http\Requests\UpdateEntityRequest;
 use Nwidart\Modules\Commands\RequestMakeCommand as OriginalRequestMakeCommand;
 use Nwidart\Modules\Support\Stub;
 

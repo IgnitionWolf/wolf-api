@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use IgnitionWolf\API\Exceptions\RouteNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Throwable;
 use Tymon\JWTAuth\Exceptions\JWTException as OriginalJWTException;
 use IgnitionWolf\API\Exceptions\JWTException as MyJWTException;
 

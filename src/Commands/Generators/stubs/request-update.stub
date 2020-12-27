@@ -2,19 +2,25 @@
 
 namespace $NAMESPACE$;
 
-use IgnitionWolf\API\Requests\UpdateEntityRequest;
+use IgnitionWolf\API\Http\Requests\UpdateEntityRequest;
 
 class $CLASS$ extends UpdateEntityRequest
 {
-    protected static string $entity;
+    protected static string $model;
 
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        return $PARENT_CLASS$::$rules;
+        $rules = $PARENT_CLASS$::$rules;
+
+        array_walk($rules, function (&$value, $key) {
+            $value = str_replace(['required|', 'required'], ['', ''], $value);
+        });
+
+        return $rules;
     }
 }
