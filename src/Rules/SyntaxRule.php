@@ -73,7 +73,7 @@ class SyntaxRule implements Rule
      * @param string|array|number $value
      * @return bool
      */
-    private function checkType(string $type, $value)
+    private function checkType(string $type, $value): bool
     {
         switch ($type) {
             case 'number':

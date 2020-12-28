@@ -5,7 +5,7 @@ namespace IgnitionWolf\API\Http\Requests;
 use Exception;
 use IgnitionWolf\API\Exceptions\NotAuthorizedException;
 use IgnitionWolf\API\Exceptions\ValidationException;
-use IgnitionWolf\API\Traits\Bounces;
+use IgnitionWolf\API\Concerns\Bounces;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use IgnitionWolf\API\Exceptions\NotAuthenticatedException;

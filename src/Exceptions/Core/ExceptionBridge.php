@@ -2,12 +2,14 @@
 
 namespace IgnitionWolf\API\Exceptions\Core;
 
+use Throwable;
+
 class ExceptionBridge
 {
     /**
      * @var array<Throwable>
      */
-    protected $map;
+    protected array $map;
 
     public function __construct(array $exceptionBridgeMap)
     {
@@ -31,10 +33,10 @@ class ExceptionBridge
      * Acts as the bridge between two exceptions.
      * Intercepts a desired exception then throws another.
      *
-     * @throws Throwable
+     * @param Throwable $exception
      * @return void
      */
-    public function intercept(\Throwable $exception)
+    public function intercept(Throwable $exception)
     {
         foreach ($this->getMap() as $class => $target) {
             if ($exception instanceof $class) {

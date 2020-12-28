@@ -2,9 +2,9 @@
 
 namespace $NAMESPACE$;
 
-use IgnitionWolf\API\Entity\Model;
+use IgnitionWolf\API\Entities\Entities;
 
-class $CLASS$ extends Model
+class $CLASS$ extends Entities
 {
     protected $fillable = $FILLABLE$;
 

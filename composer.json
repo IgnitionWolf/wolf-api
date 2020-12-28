@@ -27,6 +27,7 @@
         "laravel/socialite": "^5.0",
         "nwidart/laravel-modules": "^8.2",
         "silber/bouncer": "1.0.0-rc.9",
+        "spatie/laravel-query-builder": "^3.3",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

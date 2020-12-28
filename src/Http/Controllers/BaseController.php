@@ -2,11 +2,11 @@
 
 namespace IgnitionWolf\API\Http\Controllers;
 
-use IgnitionWolf\API\Traits\Bounces;
+use IgnitionWolf\API\Concerns\Bounces;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Database\Eloquent\Model;
-use IgnitionWolf\API\Entity\Model as IgnitionWolfModel;
+use IgnitionWolf\API\Entities\Model as IgnitionWolfModel;
 
 class BaseController extends Controller
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Traits;
+namespace IgnitionWolf\API\Concerns;
 
 use Illuminate\Support\Str;
 

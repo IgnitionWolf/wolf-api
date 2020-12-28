@@ -3,7 +3,6 @@
 namespace IgnitionWolf\API\Exceptions\Core;
 
 use Exception;
-use Flugg\Responder\Facades\Responder;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -11,7 +10,6 @@ use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use IgnitionWolf\API\Exceptions\Core\ExceptionPayload as Payload;
-use Illuminate\Support\Facades\Route;
 use Throwable;
 
 /**
@@ -99,7 +97,7 @@ class Handler extends ExceptionHandler
             }
         }
 
-        $response = Responder::error($data['code'] ?? Payload::$defaults[Payload::ARG_IDENTIFIER], $data['message']);
+        $response = responder()->error($data['code'] ?? Payload::$defaults[Payload::ARG_IDENTIFIER], $data['message']);
 
         /**
          * "meta" is the extra errors (such as validation errors)
@@ -121,7 +119,7 @@ class Handler extends ExceptionHandler
      */
     private static function intercept(Throwable $exception)
     {
-        $bridge = App::make(ExceptionBridge::class);
+        $bridge = app()->make(ExceptionBridge::class);
         $bridge->intercept($exception);
     }
 }

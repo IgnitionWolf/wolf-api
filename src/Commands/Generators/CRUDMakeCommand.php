@@ -18,7 +18,7 @@ class CRUDMakeCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Create the CRUD FormRequests and Controller for an Entity.';
+    protected $description = 'Create the CRUD FormRequests and Controller for an Entities.';
 
     /**
      * Execute the console command.

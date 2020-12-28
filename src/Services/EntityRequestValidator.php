@@ -20,7 +20,7 @@ class EntityRequestValidator
      * Check if there is a FormRequest to handle this action.
      * This only works for basic CRUD actions.
      *
-     * Naming Convention: Module\{Module}\Requests\{Action}{Model}
+     * Naming Convention: Module\{Module}\Requests\{Action}{Entities}
      *
      * Returns the filtered and validated request.
      *

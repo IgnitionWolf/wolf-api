@@ -3,13 +3,13 @@
 namespace IgnitionWolf\API\Rules;
 
 use Exception;
-use IgnitionWolf\API\Services\RequestValidator;
+use IgnitionWolf\API\Services\EntityRequestValidator;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
- * Entity validator that tries to find a certain entity ID.
+ * Entities validator that tries to find a certain entity ID.
  *
  * Validator usage:
  *
@@ -44,7 +44,7 @@ class EntityRule implements Rule
                 $previous = $app['request']->query;
                 $app['request']->query = new ParameterBag($data);
 
-                RequestValidator::validate($app['request'], $namespace, 'create');
+                EntityRequestValidator::validate($app['request'], $namespace, 'create');
                 $app['request']->query = $previous;
             } else {
                 foreach (explode(',', trim($value)) as $id) {

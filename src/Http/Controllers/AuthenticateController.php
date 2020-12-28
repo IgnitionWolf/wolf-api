@@ -8,7 +8,7 @@ use IgnitionWolf\API\Events\UserAuthenticated;
 use IgnitionWolf\API\Events\UserLoggedIn;
 use IgnitionWolf\API\Events\UserRegistered;
 use IgnitionWolf\API\Exceptions\WrongLoginMethodException;
-use IgnitionWolf\API\Traits\FillsDataFromRequest;
+use IgnitionWolf\API\Concerns\FillsDataFromRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;

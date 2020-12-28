@@ -1,11 +1,11 @@
 <?php
 
-namespace IgnitionWolf\API\Entity;
+namespace IgnitionWolf\API\Entities;
 
 use Flugg\Responder\Contracts\Transformable;
 use Flugg\Responder\Transformers\Transformer;
-use IgnitionWolf\API\Entity\Automap\Automapable;
-use IgnitionWolf\API\Traits\HasRelationships;
+use IgnitionWolf\API\Entities\Automap\Automapable;
+use IgnitionWolf\API\Concerns\HasRelationships;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
@@ -23,7 +23,7 @@ class Authenticatable extends User implements JWTSubject, Transformable
      *
      * @var array
      */
-    protected $map = [];
+    protected array $map = [];
 
     /**
      * Get a transformer for the class.
@@ -50,7 +50,7 @@ class Authenticatable extends User implements JWTSubject, Transformable
      *
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }

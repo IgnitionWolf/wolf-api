@@ -2,11 +2,10 @@
 
 namespace IgnitionWolf\API\Http\Controllers;
 
-use IgnitionWolf\API\Entity\Model;
 use Exception;
 
-use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
-use IgnitionWolf\API\Traits\FillsDataFromRequest;
+use IgnitionWolf\API\Concerns\WithHooks;
+use IgnitionWolf\API\Concerns\FillsDataFromRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,8 +13,9 @@ use Illuminate\Http\Request;
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
 use IgnitionWolf\API\Services\EntityRequestValidator;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Spatie\QueryBuilder\QueryBuilder;
 
-abstract class CRUDController extends BaseController
+class CRUDController extends BaseController
 {
     use WithHooks, FillsDataFromRequest;
 
@@ -65,7 +65,11 @@ abstract class CRUDController extends BaseController
         }
 
         $this->fillFromRequest($request, $entity);
+
+        $this->onPreUpdate($request, $entity);
         $entity->save();
+        $this->onPostUpdate($request, $entity);
+
         return $this->success($entity);
     }
 
@@ -104,15 +108,16 @@ abstract class CRUDController extends BaseController
 
         $model = app()->make(static::$model);
         if (!$entity = $model->find($id)) {
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException;
         }
 
         return $this->success($entity);
     }
 
     /**
-     * List the entities.
+     * List the entities, this uses Spatie's query builder to prepare the result.
      *
+     * @url https://github.com/spatie/laravel-query-builder
      * @param Request $request
      * @return JsonResponse
      * @throws Exception
@@ -121,24 +126,17 @@ abstract class CRUDController extends BaseController
     {
         $this->validate('list');
 
-        /**
-         * Filter and sort the query
-         */
-        $filters = json_decode($request->get('filter', '[]'), true);
+        $model = app()->make(static::$model);
+        $allowedFilters = (isset($model->filters) ? $model->filters : []) ?? [];
+        $allowedSorts = (isset($model->sorts) ? $model->sorts : []) ?? [];
+        $builder = QueryBuilder::for(static::$model)
+            ->allowedFilters($allowedFilters)
+            ->allowedSorts($allowedSorts)
+            ->toBase();
 
-        $queryBuilder = app()->make(FilterStrategy::class)->filter($filters, static::$model);
-
-        if ($request->has('sort') && $sort = json_decode($request->get('sort'))) {
-            $queryBuilder = is_string($queryBuilder)
-                ? $queryBuilder::orderBy($sort->field, $sort->order)
-                : $queryBuilder->orderBy($sort->field, $sort->order);
-        }
-
-        /**
-         * Paginate and prepare the result
-         */
+        // Paginate and prepare the result
         $limit = (int) $request->get('limit', 10);
-        $paginator = is_string($queryBuilder) ? $queryBuilder::paginate($limit) : $queryBuilder->paginate($limit);
+        $paginator = $builder->paginate($limit);
         $adapter = new IlluminatePaginatorAdapter($paginator);
 
         $collection = $paginator->getCollection();

@@ -16,10 +16,10 @@ class $CLASS$ extends Transformer
     /**
      * Transform the model.
      *
-     * @param  \Model $model
+     * @param  \Entities $model
      * @return array
      */
-    public function transform(\Model $model): array
+    public function transform(\Entities $model): array
     {
         return $model->toArray();
     }

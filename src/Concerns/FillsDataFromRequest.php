@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Traits;
+namespace IgnitionWolf\API\Concerns;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +20,7 @@ trait FillsDataFromRequest
 
         $model->fill($validAttributes);
 
-        if ($model instanceof \IgnitionWolf\API\Entity\Model) {
+        if ($model instanceof \IgnitionWolf\API\Entities\Model) {
             $model->automap();
 
             $model->fillRelationships($request->only(

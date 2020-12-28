@@ -1,11 +1,11 @@
 <?php
 
-namespace IgnitionWolf\API\Entity;
+namespace IgnitionWolf\API\Entities;
 
 use Flugg\Responder\Contracts\Transformable;
 use Flugg\Responder\Transformers\Transformer;
-use IgnitionWolf\API\Entity\Automap\Automapable;
-use IgnitionWolf\API\Traits\HasRelationships;
+use IgnitionWolf\API\Entities\Automap\Automapable;
+use IgnitionWolf\API\Concerns\HasRelationships;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Model extends EloquentModel implements Transformable
@@ -22,8 +22,6 @@ class Model extends EloquentModel implements Transformable
 
     /**
      * Translations (support for spatie/translatable).
-     *
-     * TODO: Deprecate this
      *
      * @var string[]
      */

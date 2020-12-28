@@ -2,11 +2,13 @@
 
 namespace IgnitionWolf\API\Exceptions\Core;
 
-class ExceptionPayload extends \Illuminate\Support\MessageBag
-{
+use Exception;
+use Illuminate\Support\MessageBag;
 
+class ExceptionPayload extends MessageBag
+{
     /**
-     * Exception arguments to define the exception's renderal data.
+     * Exception arguments to define the exception's data for rendering.
      * @var string
      */
     const ARG_STATUS_CODE = 'statusCode';
@@ -18,7 +20,7 @@ class ExceptionPayload extends \Illuminate\Support\MessageBag
      * Valid arguments
      * @var array
      */
-    private $validArgs = [
+    private array $validArgs = [
         self::ARG_MESSAGE,
         self::ARG_STATUS_CODE,
         self::ARG_IDENTIFIER,
@@ -29,7 +31,7 @@ class ExceptionPayload extends \Illuminate\Support\MessageBag
      * Required arguments
      * @var array
      */
-    private $requiredArgs = [
+    private array $requiredArgs = [
         self::ARG_STATUS_CODE,
         self::ARG_IDENTIFIER
     ];
@@ -37,7 +39,7 @@ class ExceptionPayload extends \Illuminate\Support\MessageBag
     /**
      * Default values
      */
-    public static $defaults = [
+    public static array $defaults = [
         self::ARG_STATUS_CODE => 500,
         self::ARG_MESSAGE => 'We encountered an internal error, please contact an administrator.',
         self::ARG_IDENTIFIER => 'INTERNAL_ERROR'
@@ -52,14 +54,13 @@ class ExceptionPayload extends \Illuminate\Support\MessageBag
      */
     public function __construct(array $bag)
     {
-
         $this->validate($bag);
 
         $bag = array_filter($bag, function ($value, $arg) {
             return in_array($arg, $this->validArgs);
         }, ARRAY_FILTER_USE_BOTH);
 
-        /* Serialize meta if array */
+        // Serialize meta if it's an array
         if (isset($bag[self::ARG_META]) && is_array($bag[self::ARG_META])) {
             $bag[self::ARG_META] = json_encode($bag[self::ARG_META]);
         }
@@ -78,7 +79,7 @@ class ExceptionPayload extends \Illuminate\Support\MessageBag
     {
         foreach ($this->requiredArgs as $arg) {
             if (!in_array($arg, array_keys($bag))) {
-                throw new \Exception("Argument $arg is required for this exception.");
+                throw new Exception("Argument $arg is required for this exception.");
             }
         }
     }

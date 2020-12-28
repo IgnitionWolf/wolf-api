@@ -16,7 +16,7 @@
     <issueHandlers>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
-                <file name="src/Entity/*.php" />
+                <file name="src/Entities/*.php" />
                 <file name="src/Commands/Generators/*.php" />
             </errorLevel>
         </PropertyNotSetInConstructor>

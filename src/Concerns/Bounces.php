@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Traits;
+namespace IgnitionWolf\API\Concerns;
 
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;

@@ -4,9 +4,9 @@ namespace IgnitionWolf\API\Services;
 
 use DateTime;
 use IgnitionWolf\API\Exceptions\VerificationCodeException;
-use IgnitionWolf\API\Entity\Authenticatable;
+use IgnitionWolf\API\Entities\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Modules\User\Entities\User;
 
 class UserVerificationService
 {
@@ -20,14 +20,15 @@ class UserVerificationService
 
     public function __construct($entity = null)
     {
-        $this->entity = config('api.user.model', \Modules\User\Entities\User::class);
+        $this->entity = config('api.user.model');
     }
 
     /**
      * Verify an user e-mail with provided token.
      *
      * @param string $token
-     * @return User
+     * @return Authenticatable
+     * @throws VerificationCodeException
      */
     public function verify(string $token): Authenticatable
     {
@@ -37,10 +38,16 @@ class UserVerificationService
             throw new VerificationCodeException(['VERIFICATION_CODE_INVALID', 'This verification code is invalid']);
         }
 
+        /**
+         * @var Authenticatable
+         */
         $user = $this->entity::find($verification->user_id);
 
         if (!$user) {
-            throw new VerificationCodeException(['VERIFICATION_CODE_INVALID_USER', 'This verification code is not assigned to any user']);
+            throw new VerificationCodeException([
+                'VERIFICATION_CODE_INVALID_USER',
+                'This verification code is not assigned to any user'
+            ]);
         }
 
         if ($user->email_verified_at) {
@@ -68,7 +75,7 @@ class UserVerificationService
     /**
      * Create a token and assign it to an user.
      *
-     * @param User $user
+     * @param Authenticatable $user
      * @return void
      */
     public function createToken(Authenticatable $user): void
@@ -84,7 +91,7 @@ class UserVerificationService
      *
      * @return string
      **/
-    private function generateToken()
+    private function generateToken(): string
     {
         return \Str::random(10);
     }

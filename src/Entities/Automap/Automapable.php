@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Entity\Automap;
+namespace IgnitionWolf\API\Entities\Automap;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 
