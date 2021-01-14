@@ -2,13 +2,13 @@
 
 namespace $NAMESPACE$;
 
-use IgnitionWolf\API\Entities\Entities;
+use IgnitionWolf\API\Entities\Model;
 
-class $CLASS$ extends Entities
+class $CLASS$ extends Model
 {
     protected $fillable = $FILLABLE$;
 
-    protected $relationships = [];
+    protected array $relationships = [];
 
-    protected $map = [];
+    protected array $map = [];
 }

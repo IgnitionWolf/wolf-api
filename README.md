@@ -9,8 +9,8 @@ This package provides a set of useful classes and magical utilities to convert y
 into a REST API, providing support by default for Laravel Modules, JWT authentication, user roles and permissions,
 custom error handling, and a guaranteed response in JSON.
 
-It's highly recommended that you use Laravel Modules to scaffold your application in order to maintain
-a properly organized structure, and allowing you to manage your API easily.
+While not required, it is highly recommended that you use Laravel Modules to scaffold your application in order to maintain
+a properly organized structure, and allowing you to maintain your API easily.
 
 ## Installation
 

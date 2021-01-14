@@ -3,6 +3,7 @@
 namespace IgnitionWolf\API\Exceptions\Core;
 
 use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -114,8 +115,9 @@ class Handler extends ExceptionHandler
      * Wrapper function to ExceptionBridge.
      * This checks if the given exception is overriden by another.
      *
-     * @throws Throwable
+     * @param Throwable $exception
      * @return void
+     * @throws BindingResolutionException
      */
     private static function intercept(Throwable $exception)
     {

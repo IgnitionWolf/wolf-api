@@ -11,8 +11,6 @@ use ReflectionClass;
 
 /**
  * Static helper class to validate entity requests.
- *
- * Convert into a Facade
  */
 class EntityRequestValidator
 {

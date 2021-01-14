@@ -49,7 +49,6 @@ class ExceptionPayload extends MessageBag
      * Construct the payload object to be used in Exceptions that inherit BaseExtension.
      *
      * @param array $bag
-     * @throws Exception
      * @return void
      */
     public function __construct(array $bag)

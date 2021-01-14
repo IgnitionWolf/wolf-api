@@ -3,6 +3,8 @@
 namespace IgnitionWolf\API;
 
 use IgnitionWolf\API\Exceptions\Core\ExceptionBridge;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 use IgnitionWolf\API\Exceptions\RouteNotFoundException;
@@ -51,5 +53,11 @@ class ExceptionServiceProvider extends ServiceProvider
         $this->app->when(ExceptionBridge::class)
             ->needs('$exceptionBridgeMap')
             ->give($this->getBridgeMap());
+
+        if (!App::environment('production')) {
+            if ((int) request()->get('debug', 0) == 1) {
+                Config::set('app.debug', true);
+            }
+        }
     }
 }

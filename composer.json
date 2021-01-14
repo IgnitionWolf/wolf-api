@@ -60,10 +60,7 @@
         "laravel": {
             "providers": [
                 "IgnitionWolf\\API\\WolfAPIServiceProvider"
-            ],
-            "aliases": {
-                "WolfAPI": "IgnitionWolf\\API\\WolfAPIFacade"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",

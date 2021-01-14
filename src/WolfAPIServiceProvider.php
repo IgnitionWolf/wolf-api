@@ -15,6 +15,8 @@ use IgnitionWolf\API\Strategies\Filter\ElasticFilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
 use IgnitionWolf\API\Strategies\Filter\PostgreSQLFilterStrategy;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Support\Stub;
@@ -61,8 +63,6 @@ class WolfAPIServiceProvider extends ServiceProvider
              */
             Stub::setBasePath(sprintf("%s/Commands/Generators/stubs", __DIR__));
         }
-
-        $this->app['router']->pushMiddlewareToGroup('api', DebugParameter::class);
 
         Route::prefix('api')
             ->middleware('api')

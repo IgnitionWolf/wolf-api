@@ -161,7 +161,7 @@ class AuthenticateController extends BaseController
 
         return $this->success([
             'authenticated' => !empty($user),
-            'user' => $user ?? (object) []
+            'user' => $user
         ]);
     }
 
@@ -183,7 +183,7 @@ class AuthenticateController extends BaseController
      * @return FormRequest
      * @throws Exception
      */
-    private function validate(string $action): FormRequest
+    public function validate(string $action): FormRequest
     {
         return app()->make(EntityRequestValidator::class)->validate(request(), $this->model, $action);
     }

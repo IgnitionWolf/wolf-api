@@ -4,6 +4,7 @@ namespace IgnitionWolf\API\Http\Controllers;
 
 use Exception;
 
+use IgnitionWolf\API\Concerns\FillsTranslatable;
 use IgnitionWolf\API\Concerns\WithHooks;
 use IgnitionWolf\API\Concerns\FillsDataFromRequest;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,7 +18,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CRUDController extends BaseController
 {
-    use WithHooks, FillsDataFromRequest;
+    use WithHooks, FillsDataFromRequest, FillsTranslatable;
 
     /**
      * Points to the model to be handled in the controller.
@@ -131,8 +132,7 @@ class CRUDController extends BaseController
         $allowedSorts = (isset($model->sorts) ? $model->sorts : []) ?? [];
         $builder = QueryBuilder::for(static::$model)
             ->allowedFilters($allowedFilters)
-            ->allowedSorts($allowedSorts)
-            ->toBase();
+            ->allowedSorts($allowedSorts);
 
         // Paginate and prepare the result
         $limit = (int) $request->get('limit', 10);
