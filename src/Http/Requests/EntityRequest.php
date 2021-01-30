@@ -2,13 +2,12 @@
 
 namespace IgnitionWolf\API\Http\Requests;
 
-use Exception;
 use IgnitionWolf\API\Exceptions\NotAuthorizedException;
 use IgnitionWolf\API\Exceptions\ValidationException;
 use IgnitionWolf\API\Concerns\Bounces;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use IgnitionWolf\API\Exceptions\NotAuthenticatedException;
+use Exception;
 
 abstract class EntityRequest extends FormRequest
 {
@@ -20,6 +19,11 @@ abstract class EntityRequest extends FormRequest
      */
     protected static string $model;
 
+    /**
+     * Set of validation rules that will be used in the rules() method of Laravel.
+     *
+     * @var array
+     */
     public static array $rules;
 
     /**
@@ -94,7 +98,7 @@ abstract class EntityRequest extends FormRequest
      * Handle a failed authorization attempt.
      *
      * @return void
-     * @throws NotAuthenticatedException|NotAuthorizedException
+     * @throws NotAuthorizedException
      */
     protected function failedAuthorization()
     {

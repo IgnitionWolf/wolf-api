@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
-use IgnitionWolf\API\Services\EntityRequestValidator;
+use IgnitionWolf\API\Services\RequestValidator;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -153,6 +153,6 @@ class CRUDController extends BaseController
      */
     private function validate(string $action): FormRequest
     {
-        return app()->make(EntityRequestValidator::class)->validate(request(), static::$model, $action);
+        return app(RequestValidator::class)->validate(static::$model, $action);
     }
 }

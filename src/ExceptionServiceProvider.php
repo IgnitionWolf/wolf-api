@@ -54,8 +54,9 @@ class ExceptionServiceProvider extends ServiceProvider
             ->needs('$exceptionBridgeMap')
             ->give($this->getBridgeMap());
 
+        Config::set('app.debug', true);
         if (!App::environment('production')) {
-            if ((int) request()->get('debug', 0) == 1) {
+            if ((int) request()->input('debug', 0) == 1) {
                 Config::set('app.debug', true);
             }
         }

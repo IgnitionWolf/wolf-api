@@ -2,6 +2,8 @@
 
 namespace IgnitionWolf\API\Http\Requests;
 
+use Exception;
+
 /**
  * Handles authorization for creating entities requests.
  * This should be extended and used for specific entities 'create' actions.
@@ -9,7 +11,10 @@ namespace IgnitionWolf\API\Http\Requests;
 class CreateEntityRequest extends EntityRequest
 {
     /**
-     * {@inheritdoc}
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     * @throws Exception
      */
     public function authorize(): bool
     {

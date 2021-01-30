@@ -12,7 +12,7 @@ use ReflectionClass;
 /**
  * Static helper class to validate entity requests.
  */
-class EntityRequestValidator
+class RequestValidator
 {
     /**
      * Check if there is a FormRequest to handle this action.
@@ -22,13 +22,12 @@ class EntityRequestValidator
      *
      * Returns the filtered and validated request.
      *
-     * @param Request $request The request to validate.
      * @param string $entity The entity name.
      * @param string $action The type of request (create/update, etc). Could be a FormRequest.
      * @return FormRequest
      * @throws Exception
      */
-    public static function validate(Request $request, string $entity, string $action): FormRequest
+    public static function validate(string $entity, string $action): FormRequest
     {
         $formRequest = null;
         if (!class_exists($action)) {
@@ -59,7 +58,7 @@ class EntityRequestValidator
             throw new Exception("$formRequest must inherit EntityRequest master class.");
         }
 
-        $request = app()->make($formRequest);
+        $request = app($formRequest);
         return $request;
     }
 
@@ -93,10 +92,6 @@ class EntityRequestValidator
             ),
             sprintf(
                 "IgnitionWolf\\API\\Http\\Requests\\%sRequest",
-                $action
-            ),
-            sprintf(
-                "IgnitionWolf\\API\\Http\\Requests\\Authentication\\%sRequest",
                 $action
             ),
             sprintf(

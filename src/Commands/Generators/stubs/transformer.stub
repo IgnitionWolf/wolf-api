@@ -3,6 +3,7 @@
 namespace $NAMESPACE$;
 
 use Flugg\Responder\Transformers\Transformer;
+use Illuminate\Database\Eloquent\Model;
 
 class $CLASS$ extends Transformer
 {
@@ -16,10 +17,10 @@ class $CLASS$ extends Transformer
     /**
      * Transform the model.
      *
-     * @param  \Entities $model
+     * @param Model $model
      * @return array
      */
-    public function transform(\Entities $model): array
+    public function transform(Model $model): array
     {
         return $model->toArray();
     }

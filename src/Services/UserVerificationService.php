@@ -20,7 +20,7 @@ class UserVerificationService
 
     public function __construct($entity = null)
     {
-        $this->entity = config('api.user.model');
+        $this->entity = config('auth.providers.users.model');
     }
 
     /**
