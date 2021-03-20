@@ -8,19 +8,5 @@ class $CLASS$ extends UpdateEntityRequest
 {
     protected static string $model;
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules(): array
-    {
-        $rules = $PARENT_CLASS$::$rules;
-
-        array_walk($rules, function (&$value, $key) {
-            $value = str_replace(['required|', 'required'], ['', ''], $value);
-        });
-
-        return $rules;
-    }
+    public static array $rules = [];
 }

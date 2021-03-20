@@ -6,5 +6,24 @@ use IgnitionWolf\API\Http\Controllers\EntityController;
 
 class $CLASS$ extends EntityController
 {
-    protected static string $model;
+    /**
+     * Points to the model to be handled in the controller.
+     *
+     * @var string
+     */
+    protected string $model;
+
+    /**
+     * List of sortable attributes for the list endpoint.
+     *
+     * @var array
+     */
+    protected array $allowedSorts = [];
+
+    /**
+     * List of filterable attributes for the list endpoint.
+     *
+     * @var array
+     */
+    protected array $allowedFilters = [];
 }

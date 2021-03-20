@@ -1,17 +1,16 @@
 <?php
 
-namespace IgnitionWolf\API\Entities;
+namespace IgnitionWolf\API\Models;
 
 use Flugg\Responder\Contracts\Transformable;
 use Flugg\Responder\Transformers\Transformer;
-use IgnitionWolf\API\Entities\Automap\Automapable;
-use IgnitionWolf\API\Concerns\HasRelationships;
+use IgnitionWolf\API\Models\Automap\Automapable;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use LaravelFillableRelations\Eloquent\Concerns\HasFillableRelations;
 
 class Model extends EloquentModel implements Transformable
 {
-    use Automapable;
-    use HasRelationships;
+    use Automapable, HasFillableRelations;
 
     /**
      * Automapable settings.

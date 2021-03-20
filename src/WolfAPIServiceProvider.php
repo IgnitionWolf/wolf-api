@@ -8,15 +8,8 @@ use IgnitionWolf\API\Commands\Generators\RequestMakeCommand;
 use IgnitionWolf\API\Commands\Generators\ScoutFlushCommand;
 use IgnitionWolf\API\Commands\Generators\ScoutImportCommand;
 use IgnitionWolf\API\Commands\Generators\TransformerMakeCommand;
-use IgnitionWolf\API\Http\Middleware\DebugParameter;
-use IgnitionWolf\API\Rules\EntityRule;
 use IgnitionWolf\API\Rules\SyntaxRule;
-use IgnitionWolf\API\Strategies\Filter\ElasticFilterStrategy;
-use IgnitionWolf\API\Strategies\Filter\FilterStrategy;
-use IgnitionWolf\API\Strategies\Filter\PostgreSQLFilterStrategy;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Support\Stub;
@@ -37,15 +30,6 @@ class WolfAPIServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Supported Laravel Scout drivers with their corresponding strategies/handlers.
-     * @var string[]
-     */
-    private $scoutStrategies = [
-        'elastic' => ElasticFilterStrategy::class,
-        'pgsql' => PostgreSQLFilterStrategy::class
-    ];
-
-    /**
      * Bootstrap the application services.
      */
     public function boot(): void
@@ -55,8 +39,6 @@ class WolfAPIServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/config.php' => config_path('api.php'),
             ], 'config');
 
-            $this->commands([]);
-
             /**
              * Order laravel-modules package generators to use our new stubs.
              * @package nwidart/laravel-modules
@@ -64,28 +46,11 @@ class WolfAPIServiceProvider extends ServiceProvider
             Stub::setBasePath(sprintf("%s/Commands/Generators/stubs", __DIR__));
         }
 
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace('IgnitionWolf\API\Http\Controllers')
-            ->group(function () {
-                $this->loadRoutesFrom(__DIR__.'/Routes/api.php');
-            });
-
         $this->loadTranslationsFrom(__DIR__.'/Resources/lang', 'api');
 
         $this->commands($this->commands);
 
-        $this->registerRules($this->app, [
-            new EntityRule,
-            new SyntaxRule
-        ]);
-
-        if (($scoutDriver = config('scout.driver')) && isset($this->scoutStrategies[$scoutDriver])) {
-            $this->app->bind(
-                FilterStrategy::class,
-                $this->scoutStrategies[$scoutDriver]
-            );
-        }
+        $this->registerRules($this->app, [new SyntaxRule]);
     }
 
     /**
@@ -100,6 +65,8 @@ class WolfAPIServiceProvider extends ServiceProvider
 
     /**
      * Register custom rules found in the Rules namespace.
+     * @param Application $app
+     * @param array $rules
      */
     private function registerRules(Application &$app, array $rules): void
     {

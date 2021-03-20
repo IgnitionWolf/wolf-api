@@ -2,7 +2,7 @@
 
 namespace $NAMESPACE$;
 
-use IgnitionWolf\API\Entities\Model;
+use IgnitionWolf\API\Models\Model;
 
 class $CLASS$ extends Model
 {

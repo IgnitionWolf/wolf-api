@@ -21,17 +21,4 @@ return [
     |
     */
     'exceptions_bridge' => [],
-
-    /*
-    |--------------------------------------------------------------------------
-    | User
-    |--------------------------------------------------------------------------
-    |
-    | You can configure user-related variables here.
-    |
-    */
-    'user' => [
-        'model' => \Modules\User\Entities\User::class,
-        'verifications' => false
-    ]
 ];

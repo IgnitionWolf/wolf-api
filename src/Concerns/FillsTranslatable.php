@@ -2,8 +2,8 @@
 
 namespace IgnitionWolf\API\Concerns;
 
-use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 trait FillsTranslatable
 {

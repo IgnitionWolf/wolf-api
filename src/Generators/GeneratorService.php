@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Services;
+namespace IgnitionWolf\API\Generators;
 
 use Exception;
 

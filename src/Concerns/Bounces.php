@@ -3,10 +3,12 @@
 namespace IgnitionWolf\API\Concerns;
 
 use Exception;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Access\Gate;
 
 trait Bounces
 {
+    protected Gate $gate;
+
     /**
      * Wrapper function to determine if an user can do a specific action.
      *
@@ -17,24 +19,10 @@ trait Bounces
      */
     public function can(string $action, $entity): bool
     {
-        $user = $this->getCurrentUser();
-
-        if (!$user) {
+        if (!auth()->check()) {
             return false;
         }
 
-        if (!method_exists($user, 'can')) {
-            throw new Exception('Trying to use can() in a FormRequest and User is not using Bouncer traits.');
-        }
-
-        return $user->can($action, $entity);
-    }
-
-    /**
-     * @return Authenticatable|null
-     */
-    public function getCurrentUser(): ?Authenticatable
-    {
-        return auth()->user();
+        return app(Gate::class)->allows($action, $entity);
     }
 }

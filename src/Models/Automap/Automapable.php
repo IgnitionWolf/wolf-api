@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Entities\Automap;
+namespace IgnitionWolf\API\Models\Automap;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -14,7 +14,6 @@ trait Automapable
      *
      * @param array $attributes
      * @return self
-     * @throws BindingResolutionException
      */
     public function automap(array $attributes = []): self
     {
@@ -29,7 +28,7 @@ trait Automapable
                 }
             }
 
-            $transformer = app()->make($value);
+            $transformer = app($value);
             $transformer->map($this, $index);
         }
 

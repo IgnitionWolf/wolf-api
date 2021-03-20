@@ -1,10 +1,10 @@
 <?php
 
-namespace IgnitionWolf\API\Entities;
+namespace IgnitionWolf\API\Models;
 
 use Flugg\Responder\Contracts\Transformable;
 use Flugg\Responder\Transformers\Transformer;
-use IgnitionWolf\API\Entities\Automap\Automapable;
+use IgnitionWolf\API\Models\Automap\Automapable;
 use IgnitionWolf\API\Concerns\HasRelationships;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;

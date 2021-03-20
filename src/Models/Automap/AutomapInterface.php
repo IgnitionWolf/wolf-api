@@ -1,8 +1,8 @@
 <?php
 
-namespace IgnitionWolf\API\Entities\Automap;
+namespace IgnitionWolf\API\Models\Automap;
 
-use IgnitionWolf\API\Entities\Model;
+use IgnitionWolf\API\Models\Model;
 
 interface AutomapInterface
 {

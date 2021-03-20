@@ -2,19 +2,18 @@
 
 namespace IgnitionWolf\API\Http\Controllers;
 
-use Exception;
-
 use IgnitionWolf\API\Concerns\FillsTranslatable;
 use IgnitionWolf\API\Concerns\WithHooks;
 use IgnitionWolf\API\Concerns\FillsDataFromRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 use IgnitionWolf\API\Exceptions\EntityNotFoundException;
-use IgnitionWolf\API\Services\RequestValidator;
+use IgnitionWolf\API\Validator\RequestValidator;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Spatie\QueryBuilder\QueryBuilder;
+
+use Exception;
 
 class CRUDController extends BaseController
 {
@@ -23,13 +22,26 @@ class CRUDController extends BaseController
     /**
      * Points to the model to be handled in the controller.
      *
-     * @psalm-var class-string
      * @var string
      */
-    protected static string $model;
+    protected string $model;
 
     /**
-     * Create a entity.
+     * List of sortable attributes for the list endpoint.
+     *
+     * @var array
+     */
+    protected array $allowedSorts = [];
+
+    /**
+     * List of filterable attributes for the list endpoint.
+     *
+     * @var array
+     */
+    protected array $allowedFilters = [];
+
+    /**
+     * Create an entity.
      *
      * @return JsonResponse
      * @throws Exception
@@ -38,7 +50,7 @@ class CRUDController extends BaseController
     {
         $request = $this->validate('create');
 
-        $entity = new static::$model;
+        $entity = new $this->model;
         $this->fillFromRequest($request, $entity);
 
         $this->onPreCreate($request, $entity);
@@ -60,8 +72,7 @@ class CRUDController extends BaseController
     {
         $request = $this->validate('update');
 
-        $model = app()->make(static::$model);
-        if (!$entity = $model->find($id)) {
+        if (!$entity = app($this->model)->find($id)) {
             throw new EntityNotFoundException;
         }
 
@@ -86,7 +97,7 @@ class CRUDController extends BaseController
     {
         $this->validate('delete');
 
-        $model = app()->make(static::$model);
+        $model = app($this->model);
         if (!$entity = $model->find($id)) {
             throw new EntityNotFoundException;
         }
@@ -107,8 +118,7 @@ class CRUDController extends BaseController
     {
         $this->validate('read');
 
-        $model = app()->make(static::$model);
-        if (!$entity = $model->find($id)) {
+        if (!$entity = app($this->model)->find($id)) {
             throw new EntityNotFoundException;
         }
 
@@ -119,23 +129,18 @@ class CRUDController extends BaseController
      * List the entities, this uses Spatie's query builder to prepare the result.
      *
      * @url https://github.com/spatie/laravel-query-builder
-     * @param Request $request
      * @return JsonResponse
      * @throws Exception
      */
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $this->validate('list');
+        $request = $this->validate('list');
 
-        $model = app()->make(static::$model);
-        $allowedFilters = (isset($model->filters) ? $model->filters : []) ?? [];
-        $allowedSorts = (isset($model->sorts) ? $model->sorts : []) ?? [];
-        $builder = QueryBuilder::for(static::$model)
-            ->allowedFilters($allowedFilters)
-            ->allowedSorts($allowedSorts);
+        $builder = QueryBuilder::for($this->model)
+            ->allowedFilters($this->allowedFilters)
+            ->allowedSorts($this->allowedSorts);
 
-        // Paginate and prepare the result
-        $limit = (int) $request->get('limit', 10);
+        $limit = (int) $request->input('limit', 10);
         $paginator = $builder->paginate($limit);
         $adapter = new IlluminatePaginatorAdapter($paginator);
 
@@ -153,6 +158,6 @@ class CRUDController extends BaseController
      */
     private function validate(string $action): FormRequest
     {
-        return app(RequestValidator::class)->validate(static::$model, $action);
+        return app(RequestValidator::class)->validate($this->model, $action);
     }
 }

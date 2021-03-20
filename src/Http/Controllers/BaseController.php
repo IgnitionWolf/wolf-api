@@ -6,7 +6,6 @@ use IgnitionWolf\API\Concerns\Bounces;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Database\Eloquent\Model;
-use IgnitionWolf\API\Entities\Model as IgnitionWolfModel;
 
 class BaseController extends Controller
 {
@@ -15,8 +14,8 @@ class BaseController extends Controller
     /**
      * Wrapper function to return a successful response.
      *
-     * @param null|object|array|Model|IgnitionWolfModel $data
-     * @param class-string $transformer
+     * @param null|object|array|Model $data
+     * @param string $transformer
      * @return JsonResponse
      */
     public function success($data = null, $transformer = null): JsonResponse
@@ -28,7 +27,7 @@ class BaseController extends Controller
      * Wrapper function to return a response with error.
      *
      * @param string $code
-     * @param null|array|Model|IgnitionWolfModel $data
+     * @param null|array|Model $data
      * @return JsonResponse
      */
     public function error($code = '', $data = []): JsonResponse

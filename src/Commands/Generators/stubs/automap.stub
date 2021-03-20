@@ -2,19 +2,19 @@
 
 namespace $NAMESPACE$;
 
-use Illuminate\Database\Eloquent\Entities;
-use IgnitionWolf\API\Entities\Automap\AutomapInterface;
+use Illuminate\Database\Eloquent\Models;
+use IgnitionWolf\API\Models\Automap\AutomapInterface;
 
 class $CLASS$ implements AutomapInterface
 {
     /**
      * Automatically map an entity attribute.
      *
-     * @param Entities $entity
+     * @param Models $entity
      * @param string $attribute
      * @return void
      */
-    public function map(Entities $entity, string $attribute)
+    public function map(Models $entity, string $attribute)
     {
         //
     }

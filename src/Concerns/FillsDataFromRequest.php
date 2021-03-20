@@ -2,7 +2,6 @@
 
 namespace IgnitionWolf\API\Concerns;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -10,9 +9,8 @@ use Illuminate\Http\Request;
 trait FillsDataFromRequest
 {
     /**
-     * @param FormRequest|Request $request
+     * @param FormRequest|Request|array $request
      * @param Model $model
-     * @throws BindingResolutionException
      */
     public function fillFromRequest($request, Model $model)
     {
@@ -20,16 +18,12 @@ trait FillsDataFromRequest
 
         $model->fill($validAttributes);
 
-        if ($model instanceof \IgnitionWolf\API\Entities\Model) {
+        if ($model instanceof \IgnitionWolf\API\Models\Model) {
             $model->automap();
-
-            $model->fillRelationships($request->only(
-                array_intersect($model->getRelationships(), array_keys($validAttributes))
-            ));
         }
 
-        if (method_exists($this, 'fillTranslatable') && method_exists($model, 'translate')) {
-            $this->fillTranslatable($model, $validAttributes);
-        }
+//        if (method_exists($this, 'fillTranslatable') && method_exists($model, 'translate')) {
+//            $this->fillTranslatable($model, $validAttributes);
+//        }
     }
 }

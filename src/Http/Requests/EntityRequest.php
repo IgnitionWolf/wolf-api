@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Exception;
 
-abstract class EntityRequest extends FormRequest
+class EntityRequest extends FormRequest
 {
     use Bounces;
 

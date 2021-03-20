@@ -37,7 +37,7 @@ class ScoutFlushCommand extends Command
             }
         }
 
-        $lookup = base_path("Modules/$module/Entities/$name.php");
+        $lookup = base_path("Modules/$module/Models/$name.php");
         foreach (glob($lookup) as $path) {
             $model = substr($path, strpos($path, 'Modules'));
             $model = str_replace('.php', '', $model);

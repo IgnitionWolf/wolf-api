@@ -8,7 +8,5 @@ class $CLASS$ extends $PARENT_CLASS$
 {
     protected static string $model;
 
-    public static array $rules = [
-        // Add rules here
-    ];
+    public static array $rules = [];
 }

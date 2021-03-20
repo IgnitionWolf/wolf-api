@@ -31,7 +31,7 @@ class ScoutImportCommand extends Command
         $name = $this->argument('name');
         $module = $this->argument('module');
 
-        $lookup = base_path("Modules/$module/Entities/$name.php");
+        $lookup = base_path("Modules/$module/Models/$name.php");
         foreach (glob($lookup) as $path) {
             $model = substr($path, strpos($path, 'Modules'));
             $model = str_replace('.php', '', $model);
