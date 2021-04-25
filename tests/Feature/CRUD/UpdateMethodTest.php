@@ -18,12 +18,30 @@ class UpdateMethodTest extends TestCase
             ]);
         });
 
-        Dummy::create(['name' => 'Old Name']);
+        Dummy::create([
+            'name' => 'Old Name',
+            'dummy_children' => [
+                ['name' => 'Old Child']
+            ],
+            'dummy_poly' => [
+                ['name' => 'Old Poly Child']
+            ]
+        ]);
 
         app(Router::class)->post('/dummy/{id}', [DummyController::class, 'update']);
 
         $response = $this->post('/dummy/1', [
-            'name' => 'New Name'
+            'name' => 'New Name',
+            'dummy_children' => [
+                [
+                    'name' => 'New Child'
+                ]
+            ],
+            'dummy_poly' => [
+                [
+                    'name' => 'New Poly Child'
+                ]
+            ]
         ]);
 
         $response->assertJsonFragment([
@@ -31,7 +49,19 @@ class UpdateMethodTest extends TestCase
             'success' => true,
             'data' => [
                 'id' => 1,
-                'name' => 'New Name'
+                'name' => 'New Name',
+                'dummy_children' => [
+                    [
+                        'id' => 2,
+                        'name' => 'New Child'
+                    ]
+                ],
+                'dummy_poly' => [
+                    [
+                        'id' => 2,
+                        'name' => 'New Poly Child'
+                    ]
+                ]
             ]
         ]);
     }

@@ -2,7 +2,6 @@
 
 namespace IgnitionWolf\API\Http\Controllers;
 
-use IgnitionWolf\API\Concerns\FillsTranslatable;
 use IgnitionWolf\API\Concerns\WithHooks;
 use IgnitionWolf\API\Concerns\FillsDataFromRequest;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,7 +16,7 @@ use Exception;
 
 class CRUDController extends BaseController
 {
-    use WithHooks, FillsDataFromRequest, FillsTranslatable;
+    use WithHooks, FillsDataFromRequest;
 
     /**
      * Points to the model to be handled in the controller.

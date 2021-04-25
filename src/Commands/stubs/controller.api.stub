@@ -1,10 +1,10 @@
 <?php
 
-namespace $CLASS_NAMESPACE$;
+namespace DummyNamespace;
 
 use IgnitionWolf\API\Http\Controllers\EntityController;
 
-class $CLASS$ extends EntityController
+class DummyClass extends EntityController
 {
     /**
      * Points to the model to be handled in the controller.

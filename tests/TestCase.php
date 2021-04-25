@@ -5,10 +5,13 @@ namespace IgnitionWolf\API\Tests;
 use Flugg\Responder\ResponderServiceProvider;
 use IgnitionWolf\API\ExceptionServiceProvider;
 use IgnitionWolf\API\WolfAPIServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
+    use RefreshDatabase;
+
     public static array $config = [];
 
     public function setUp(): void
@@ -17,10 +20,13 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         if (!self::$config) {
             self::$config = require 'config/config.php';
+            $this->artisan('clear-compiled');
         }
 
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
     }
+
+
 
     protected function getPackageProviders($app): array
     {

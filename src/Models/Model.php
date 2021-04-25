@@ -2,29 +2,14 @@
 
 namespace IgnitionWolf\API\Models;
 
-use Flugg\Responder\Contracts\Transformable;
-use Flugg\Responder\Transformers\Transformer;
-use IgnitionWolf\API\Models\Automap\Automapable;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
 use LaravelFillableRelations\Eloquent\Concerns\HasFillableRelations;
+use Illuminate\Database\Eloquent\Model as BaseModel;
+use Flugg\Responder\Transformers\Transformer;
+use Flugg\Responder\Contracts\Transformable;
 
-class Model extends EloquentModel implements Transformable
+class Model extends BaseModel implements Transformable
 {
-    use Automapable, HasFillableRelations;
-
-    /**
-     * Automapable settings.
-     *
-     * @var array
-     */
-    protected array $map = [];
-
-    /**
-     * Translations (support for spatie/translatable).
-     *
-     * @var string[]
-     */
-    protected array $translatable = [];
+    use HasFillableRelations;
 
     /**
      * Get a transformer for the class.

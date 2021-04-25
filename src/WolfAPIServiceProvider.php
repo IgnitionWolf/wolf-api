@@ -2,33 +2,15 @@
 
 namespace IgnitionWolf\API;
 
-use IgnitionWolf\API\Commands\Generators\AutomapMakeCommand;
-use IgnitionWolf\API\Commands\Generators\CRUDMakeCommand;
-use IgnitionWolf\API\Commands\Generators\RequestMakeCommand;
-use IgnitionWolf\API\Commands\Generators\ScoutFlushCommand;
-use IgnitionWolf\API\Commands\Generators\ScoutImportCommand;
-use IgnitionWolf\API\Commands\Generators\TransformerMakeCommand;
-use IgnitionWolf\API\Rules\SyntaxRule;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Route;
+use IgnitionWolf\API\Commands\AutomapMakeCommand;
+use IgnitionWolf\API\Commands\ControllerMakeCommand;
+use IgnitionWolf\API\Commands\RequestMakeCommand;
+use IgnitionWolf\API\Commands\CRUDMakeCommand;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-use Nwidart\Modules\Support\Stub;
 
-class WolfAPIServiceProvider extends ServiceProvider
+class WolfAPIServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    /**
-     * Commands to register
-     * @var string[]
-     */
-    private $commands = [
-        RequestMakeCommand::class,
-        CRUDMakeCommand::class,
-        TransformerMakeCommand::class,
-        AutomapMakeCommand::class,
-        ScoutFlushCommand::class,
-        ScoutImportCommand::class
-    ];
-
     /**
      * Bootstrap the application services.
      */
@@ -38,19 +20,24 @@ class WolfAPIServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('api.php'),
             ], 'config');
-
-            /**
-             * Order laravel-modules package generators to use our new stubs.
-             * @package nwidart/laravel-modules
-             */
-            Stub::setBasePath(sprintf("%s/Commands/Generators/stubs", __DIR__));
         }
 
+        $this->commands([
+            ControllerMakeCommand::class,
+            RequestMakeCommand::class,
+            CRUDMakeCommand::class,
+            AutomapMakeCommand::class,
+        ]);
+
+        $this->app->extend('command.request.make', function () {
+            return app(RequestMakeCommand::class);
+        });
+
+        $this->app->extend('command.controller.make', function () {
+            return app(ControllerMakeCommand::class);
+        });
+
         $this->loadTranslationsFrom(__DIR__.'/Resources/lang', 'api');
-
-        $this->commands($this->commands);
-
-        $this->registerRules($this->app, [new SyntaxRule]);
     }
 
     /**
@@ -64,14 +51,12 @@ class WolfAPIServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register custom rules found in the Rules namespace.
-     * @param Application $app
-     * @param array $rules
+     * @return string[]
      */
-    private function registerRules(Application &$app, array $rules): void
+    public function provides(): array
     {
-        foreach ($rules as $rule) {
-            $rule($app);
-        }
+        return [
+            'command.request.make'
+        ];
     }
 }

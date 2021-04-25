@@ -1,0 +1,29 @@
+<?php
+
+namespace DummyNamespace;
+
+use IgnitionWolf\API\Http\Controllers\EntityController;
+
+class DummyClass extends EntityController
+{
+    /**
+     * Points to the model to be handled in the controller.
+     *
+     * @var string
+     */
+    protected string $model = \DummyFullModelClass;
+
+    /**
+     * List of sortable attributes for the list endpoint.
+     *
+     * @var array
+     */
+    protected array $allowedSorts = [];
+
+    /**
+     * List of filterable attributes for the list endpoint.
+     *
+     * @var array
+     */
+    protected array $allowedFilters = [];
+}

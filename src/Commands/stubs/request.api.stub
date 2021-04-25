@@ -1,0 +1,22 @@
+<?php
+
+namespace DummyNamespace;
+
+use IgnitionWolf\API\Http\Requests\EntityRequest;
+
+class DummyClass extends EntityRequest
+{
+    /**
+     * Points to the model to be handled in the request.
+     *
+     * @var string
+     */
+    protected static string $model;
+
+    /**
+     * Contains all the validation rules.
+     *
+     * @var string
+     */
+    public static array $rules = [];
+}

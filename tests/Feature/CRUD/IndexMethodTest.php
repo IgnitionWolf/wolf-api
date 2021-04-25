@@ -29,8 +29,8 @@ class IndexMethodTest extends TestCase
             'status' => 200,
             'success' => true,
             'data' => [
-                [ 'id' => 1, 'name' => 'First' ],
-                [ 'id' => 2, 'name' => 'Second' ],
+                [ 'id' => 1, 'name' => 'First', 'dummy_children' => [], 'dummy_poly' => [] ],
+                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [] ],
             ]
         ]);
     }
@@ -54,8 +54,8 @@ class IndexMethodTest extends TestCase
             'status' => 200,
             'success' => true,
             'data' => [
-                [ 'id' => 2, 'name' => 'Second' ],
-                [ 'id' => 1, 'name' => 'First' ],
+                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [] ],
+                [ 'id' => 1, 'name' => 'First', 'dummy_children' => [], 'dummy_poly' => [] ],
             ]
         ]);
 
@@ -81,7 +81,7 @@ class IndexMethodTest extends TestCase
             'status' => 200,
             'success' => true,
             'data' => [
-                [ 'id' => 2, 'name' => 'Second' ],
+                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [] ],
             ]
         ]);
     }

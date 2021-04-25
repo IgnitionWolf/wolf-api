@@ -18,7 +18,7 @@ class ShowMethodTest extends TestCase
             ]);
         });
 
-        Dummy::create(['name' => 'Old Name']);
+        Dummy::create(['name' => 'My Name']);
 
         app(Router::class)->get('/dummy/{id}', [DummyController::class, 'show']);
 
@@ -29,7 +29,8 @@ class ShowMethodTest extends TestCase
             'success' => true,
             'data' => [
                 'id' => 1,
-                'name' => 'Old Name'
+                'name' => 'My Name',
+                'dummy_children' => []
             ]
         ]);
     }

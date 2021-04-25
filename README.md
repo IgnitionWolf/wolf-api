@@ -18,6 +18,7 @@ You can install the package via composer:
 
 ```bash
 composer require ignitionwolf/wolf-api
+php artisan clear-compiled
 ```
 
 ## Usage
