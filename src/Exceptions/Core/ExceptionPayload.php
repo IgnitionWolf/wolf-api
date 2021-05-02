@@ -2,15 +2,11 @@
 
 namespace IgnitionWolf\API\Exceptions\Core;
 
-use Exception;
 use Illuminate\Support\MessageBag;
+use Exception;
 
 class ExceptionPayload extends MessageBag
 {
-    /**
-     * Exception arguments to define the exception's data for rendering.
-     * @var string
-     */
     const ARG_STATUS_CODE = 'statusCode';
     const ARG_IDENTIFIER = 'code';
     const ARG_MESSAGE = 'message';
@@ -50,6 +46,7 @@ class ExceptionPayload extends MessageBag
      *
      * @param array $bag
      * @return void
+     * @throws Exception
      */
     public function __construct(array $bag)
     {

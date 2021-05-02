@@ -18,8 +18,8 @@ intercepts thrown exceptions and outputs them as JSON accordingly.
 You can install the package via composer:
 
 ``` bash
-composer require ignitionwolf/wolf-api
-php artisan clear-compiled
+$ composer require ignitionwolf/wolf-api
+$ php artisan clear-compiled
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ php artisan clear-compiled
 
 You can create the CRUD controller file, form requests, model, and route definitions by running this command:
 
-```
+``` bash
 $ php artisan make:crud {name}
 ```
 
@@ -91,8 +91,8 @@ but that you can also use Laravel events and listeners, or the Automap pattern.
 There are some repetitive actions when creating a model. For example, let's say you want to keep record on who created
 certain entities.
 
-```
-php artisan make:automap CreatedByAttribute
+```bash
+$ php artisan make:automap CreatedByAttribute
 ```
 
 ```php
@@ -128,8 +128,8 @@ with Laravel principles and best practices, while WolfAPI removes the overhead o
 
 ## Testing
 
-```
-composer test
+```bash
+$ composer test
 ```
 
 ## Contributing
@@ -138,12 +138,11 @@ Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Please send an e-mail to mauricio@ignitionwolf.com in order to report security vulnerabilities.
 
 ## Credits
 
 - [IgnitionWolf](https://github.com/IgnitionWolf)
-- [All Contributors](../../contributors)
 
 ## License
 

@@ -13,19 +13,6 @@ use Throwable;
 class ExceptionServiceProvider extends ServiceProvider
 {
     /**
-     * Get the equivalent custom exception of a 3rd party provider exception.
-     * Mostly used to override Laravel exceptions and format them correctly.
-     *
-     * @return array<Throwable>
-     */
-    private function getBridgeMap(): array
-    {
-        return array_merge(config('api.exceptions_bridge', []), [
-            NotFoundHttpException::class => RouteNotFoundException::class
-        ]);
-    }
-
-    /**
      * Bootstrap the application services.
      */
     public function boot()
@@ -47,11 +34,23 @@ class ExceptionServiceProvider extends ServiceProvider
             ->needs('$exceptionBridgeMap')
             ->give($this->getBridgeMap());
 
-        config(['app.debug' => true]);
         if (!app()->environment('production')) {
             if ((int) request()->input('debug', 0) == 1) {
                 config(['app.debug' => true]);
             }
         }
+    }
+
+    /**
+     * Get the equivalent custom exception of a 3rd party provider exception.
+     * Mostly used to override Laravel exceptions and format them correctly.
+     *
+     * @return array<Throwable>
+     */
+    private function getBridgeMap(): array
+    {
+        return array_merge(config('api.exceptions_bridge', []), [
+            NotFoundHttpException::class => RouteNotFoundException::class
+        ]);
     }
 }

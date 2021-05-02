@@ -18,8 +18,8 @@ abstract class BaseException extends Exception
      * $meta is just the additional errors array (for example, form errors)
      *
      * @param mixed|null $meta
-     * @param Exception $previous
-     * @return void
+     * @param Exception|null $previous
+     * @throws Exception
      */
     public function __construct($meta = null, Exception $previous = null)
     {
@@ -30,9 +30,10 @@ abstract class BaseException extends Exception
     }
 
     /**
-     * This is an abstract method. It must be overriden in children classes.
+     * This must be overridden in child classes.
      *
      * @return ExceptionPayload
+     * @throws Exception
      */
     public function getPayload(): ExceptionPayload
     {
@@ -47,7 +48,7 @@ abstract class BaseException extends Exception
      * @param string $value
      * @return self
      */
-    public function setMessage($value): self
+    public function setMessage(string $value): self
     {
         $this->message = $value;
         return $this;
@@ -58,8 +59,9 @@ abstract class BaseException extends Exception
      *
      * @param string $key
      * @return mixed
+     * @throws Exception
      */
-    public function get(string $key)
+    public function get(string $key): string
     {
         $bag = $this->getPayload();
         $value = $bag->first($key);
@@ -78,6 +80,7 @@ abstract class BaseException extends Exception
      * Internal function which maps the payload into the exception.
      *
      * @return void
+     * @throws Exception
      */
     private function loadPayload()
     {
