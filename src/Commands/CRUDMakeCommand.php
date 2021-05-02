@@ -29,6 +29,8 @@ class CRUDMakeCommand extends Command
     {
         $name = $this->argument('name');
 
+        $this->call("make:model", ['name' => $name]);
+
         foreach (['Create', 'Read', 'Update', 'Delete', 'List'] as $action) {
             $this->call("make:request", [
                 'name' => "{$name}/{$action}Request",

@@ -21,6 +21,14 @@ class CRUDMakeCommandTest extends TestCase
 
         $this->artisan('make:crud', ['name' => 'Dummy']);
 
+        $controller = $this->app->basePath('app/Http/Controllers/DummyController.php');
+        $this->toBeTrashed($controller);
+        $model = $this->app->basePath('app/Models/Dummy.php');
+        $this->toBeTrashed($model);
+
+        $this->assertFileExists($controller);
+        $this->assertFileExists($model);
+
         foreach ($requests as $action => $request) {
             $filename = $request . '.php';
             $name = substr($request, strrpos($request, '/') + 1);
