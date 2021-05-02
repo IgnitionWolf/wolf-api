@@ -2,7 +2,6 @@
 
 namespace IgnitionWolf\API\Tests\Feature\Commands;
 
-use IgnitionWolf\API\Http\Requests\EntityRequest;
 use IgnitionWolf\API\Tests\TestCase;
 use IgnitionWolf\API\Support\Stub;
 
@@ -11,6 +10,7 @@ class RequestMakeCommandTest extends TestCase
     public function test_it_creates_plain_request_file()
     {
         $expectedDestination = $this->app->basePath('app/Http/Requests') . '/DummyPlainRequest.php';
+        $this->toBeTrashed($expectedDestination);
 
         $this->artisan('make:request', ['name' => 'DummyPlainRequest']);
         $this->assertFileExists($expectedDestination);
@@ -18,6 +18,8 @@ class RequestMakeCommandTest extends TestCase
         $this->assertStringEqualsFile(
             $expectedDestination,
             app(Stub::class)->render('request.stub', [
+                'ParentDummyFullClassName' => 'IgnitionWolf\\API\\Http\\Requests\\EntityRequest',
+                'ParentDummyModelClass' => 'EntityRequest',
                 'DummyNamespace' => 'App\\Http\\Requests',
                 'DummyClass' => 'DummyPlainRequest'
             ])
@@ -35,6 +37,7 @@ class RequestMakeCommandTest extends TestCase
                 $this->app->basePath('app/Http/Requests'),
                 $class
             );
+            $this->toBeTrashed($expectedDestination);
 
             $this->artisan('make:request', ['name' => $class]);
             $this->assertFileExists($expectedDestination);
@@ -42,9 +45,10 @@ class RequestMakeCommandTest extends TestCase
             $this->assertStringEqualsFile(
                 $expectedDestination,
                 app(Stub::class)->render('request.api.stub', [
+                    'ParentDummyFullClassName' => "IgnitionWolf\\API\\Http\\Requests\\${request}EntityRequest",
+                    'ParentDummyModelClass' => "${request}EntityRequest",
                     'DummyNamespace' => 'App\\Http\\Requests',
                     'DummyClass' => $class,
-                    EntityRequest::class => "IgnitionWolf\\API\\Http\\Requests\\${request}EntityRequest"
                 ])
             );
 

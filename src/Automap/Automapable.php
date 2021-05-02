@@ -1,11 +1,9 @@
 <?php
 
-namespace IgnitionWolf\API\Models\Automap;
-
-use Illuminate\Contracts\Container\BindingResolutionException;
+namespace IgnitionWolf\API\Automap;
 
 /**
- * Make an entity auto-mapable, this allows automatic data assignment upon creation.
+ * This allows automatic data assignment.
  */
 trait Automapable
 {

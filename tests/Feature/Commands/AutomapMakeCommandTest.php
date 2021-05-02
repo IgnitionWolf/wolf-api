@@ -10,6 +10,7 @@ class AutomapMakeCommandTest extends TestCase
     public function test_it_creates_automap_file()
     {
         $expectedDestination = $this->app->basePath('app/Automap') . '/DummyAutomap.php';
+        $this->toBeTrashed($expectedDestination);
 
         $this->artisan('make:automap', ['name' => 'DummyAutomap']);
         $this->assertFileExists($expectedDestination);

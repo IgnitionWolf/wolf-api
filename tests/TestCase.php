@@ -4,13 +4,14 @@ namespace IgnitionWolf\API\Tests;
 
 use Flugg\Responder\ResponderServiceProvider;
 use IgnitionWolf\API\ExceptionServiceProvider;
+use IgnitionWolf\API\Tests\Concerns\HasGarbageCollection;
 use IgnitionWolf\API\WolfAPIServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, HasGarbageCollection;
 
     public static array $config = [];
 
@@ -26,7 +27,12 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
 
+        $this->collect();
+    }
 
     protected function getPackageProviders($app): array
     {

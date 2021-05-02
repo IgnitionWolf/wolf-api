@@ -1,5 +1,0 @@
-<?php
-
-use Illuminate\Support\Facades\Route;
-
-Route::apiResource('$LOWER_NAME$', '$STUDLY_NAME$Controller');

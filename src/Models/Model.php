@@ -3,23 +3,10 @@
 namespace IgnitionWolf\API\Models;
 
 use LaravelFillableRelations\Eloquent\Concerns\HasFillableRelations;
-use Illuminate\Database\Eloquent\Model as BaseModel;
-use Flugg\Responder\Transformers\Transformer;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use Flugg\Responder\Contracts\Transformable;
 
-class Model extends BaseModel implements Transformable
+abstract class Model extends Eloquent implements Transformable
 {
     use HasFillableRelations;
-
-    /**
-     * Get a transformer for the class.
-     *
-     * @return Transformer|string|callable
-     */
-    public function transformer()
-    {
-        return function () {
-            return $this->toArray();
-        };
-    }
 }

@@ -2,16 +2,16 @@
 
 namespace DummyNamespace;
 
-use IgnitionWolf\API\Http\Controllers\EntityController;
+use IgnitionWolf\API\Http\Controllers\CRUDController;
 
-class DummyClass extends EntityController
+class DummyClass extends CRUDController
 {
     /**
      * Points to the model to be handled in the controller.
      *
      * @var string
      */
-    protected string $model = \DummyFullModelClass;
+     protected string $model = \DummyFullModelClass::class;
 
     /**
      * List of sortable attributes for the list endpoint.

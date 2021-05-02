@@ -3,7 +3,7 @@
 namespace IgnitionWolf\API\Http\Controllers;
 
 use IgnitionWolf\API\Concerns\WithHooks;
-use IgnitionWolf\API\Concerns\FillsDataFromRequest;
+use IgnitionWolf\API\Concerns\FillsFromRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -16,7 +16,7 @@ use Exception;
 
 class CRUDController extends BaseController
 {
-    use WithHooks, FillsDataFromRequest;
+    use WithHooks, FillsFromRequest;
 
     /**
      * Points to the model to be handled in the controller.
@@ -139,13 +139,12 @@ class CRUDController extends BaseController
             ->allowedFilters($this->allowedFilters)
             ->allowedSorts($this->allowedSorts);
 
-        $limit = (int) $request->input('limit', 10);
-        $paginator = $builder->paginate($limit);
-        $adapter = new IlluminatePaginatorAdapter($paginator);
+        $paginator = $builder->paginate((int) $request->input('limit', 10));
 
-        $collection = $paginator->getCollection();
-
-        return responder()->success($collection)->paginator($adapter)->respond();
+        return responder()
+            ->success($paginator->getCollection())
+            ->paginator(new IlluminatePaginatorAdapter($paginator))
+            ->respond();
     }
 
     /**

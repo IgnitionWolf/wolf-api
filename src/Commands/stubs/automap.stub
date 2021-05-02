@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use IgnitionWolf\API\Models\Automap\AutomapInterface;
+use IgnitionWolf\API\Automap\AutomapInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class DummyClass implements AutomapInterface

@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use IgnitionWolf\API\Http\Controllers\EntityController;
+use IgnitionWolf\API\Http\Controllers\CRUDController;
 
-class DummyClass extends EntityController
+class DummyClass extends CRUDController
 {
     /**
      * Points to the model to be handled in the controller.

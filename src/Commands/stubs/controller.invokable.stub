@@ -12,7 +12,7 @@ class DummyClass extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(\Illuminate\Http\Request $request)
     {
         //
     }

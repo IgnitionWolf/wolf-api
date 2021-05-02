@@ -26,7 +26,7 @@ trait WithHooks
      */
     public function onPostCreate(Request $request, Model $model)
     {
-        // Override this method
+        //
     }
 
     /**
@@ -48,6 +48,6 @@ trait WithHooks
      */
     public function onPostUpdate(Request $request, Model $model)
     {
-        // Override this method
+        //
     }
 }

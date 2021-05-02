@@ -36,7 +36,7 @@ class CRUDMakeCommand extends Command
         }
 
         $this->call("make:controller", [
-            'controller' => "${name}Controller",
+            'name' => "${name}Controller",
             '--api' => true
         ]);
     }

@@ -5,17 +5,14 @@ namespace IgnitionWolf\API\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Container\Container;
 
-/**
- * Static helper class to validate entity requests.
- */
 class RequestValidator
 {
     /**
      * Check if there is a FormRequest to handle a specific action (usually CRUD).
      *
      * This searches in the following namespaces:
-     * - Modules\{module}\Http\Requests\{Model}\{Action}Request
-     * - Modules\{module}\Http\Requests\{Action}{Model}Request
+     * - App\Http\Requests\{Model}\{Action}Request
+     * - App\Http\Requests\{Action}{Model}Request
      *
      * Or defaults to WolfAPI's EntityRequest.
      *
@@ -63,10 +60,6 @@ class RequestValidator
      */
     protected function getNamespace(string $class): string
     {
-        if (strpos($class, 'Modules\\') !== false) {
-            return substr($class, 0, strpos($class, '\\', 9));
-        }
-
         return Container::getInstance()->getNamespace();
     }
 }

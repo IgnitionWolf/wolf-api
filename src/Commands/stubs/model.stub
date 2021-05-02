@@ -1,14 +1,28 @@
 <?php
 
-namespace $NAMESPACE$;
+namespace DummyNamespace;
 
+use Flugg\Responder\Transformers\Transformer;
 use IgnitionWolf\API\Models\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class $CLASS$ extends Model
+class DummyClass extends Model
 {
-    protected $fillable = $FILLABLE$;
+    use HasFactory;
 
-    protected array $relationships = [];
+    protected $fillable = [];
 
-    protected array $map = [];
+    protected $fillable_relations = [];
+
+    /**
+     * Get a transformer for the class.
+     *
+     * @return Transformer|string|callable
+     */
+    public function transformer()
+    {
+        return function () {
+            return $this->toArray();
+        };
+    }
 }

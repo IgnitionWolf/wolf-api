@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use IgnitionWolf\API\Http\Requests\EntityRequest;
+use ParentDummyFullClassName;
 
-class DummyClass extends EntityRequest
+class DummyClass extends ParentDummyModelClass
 {
     /**
      * Points to the model to be handled in the request.

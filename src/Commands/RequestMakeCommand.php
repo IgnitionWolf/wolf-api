@@ -49,14 +49,25 @@ class RequestMakeCommand extends \Illuminate\Foundation\Console\RequestMakeComma
      */
     protected function buildClass($name)
     {
-        $parent = EntityRequest::class;
+        $replace = [
+            'ParentDummyFullClassName' => EntityRequest::class,
+            'ParentDummyModelClass' => 'EntityRequest'
+        ];
+
         foreach (static::$requests as $keyword => $class) {
             if (strpos(strtolower($name), $keyword) !== false) {
-                $parent = $class;
+                $replace = [
+                    'ParentDummyFullClassName' => $class,
+                    'ParentDummyModelClass' => substr($class, strrpos($class, '\\') + 1)
+                ];
             }
         }
 
-        return str_replace(EntityRequest::class, $parent, parent::buildClass($name));
+        return str_replace(
+            array_keys($replace),
+            array_values($replace),
+            parent::buildClass($name)
+        );
     }
 
     /**

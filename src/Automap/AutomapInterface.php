@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Models\Automap;
+namespace IgnitionWolf\API\Automap;
 
 use IgnitionWolf\API\Models\Model;
 
