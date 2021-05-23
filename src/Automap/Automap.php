@@ -4,7 +4,7 @@ namespace IgnitionWolf\API\Automap;
 
 use IgnitionWolf\API\Models\Model;
 
-interface AutomapInterface
+interface Automap
 {
     /**
      * Automatically map an entity attribute.

@@ -7,6 +7,7 @@ use IgnitionWolf\API\Commands\ControllerMakeCommand;
 use IgnitionWolf\API\Commands\CRUDMakeCommand;
 use IgnitionWolf\API\Commands\RequestMakeCommand;
 use IgnitionWolf\API\Commands\ModelMakeCommand;
+use IgnitionWolf\API\Commands\TransformerMakeCommand;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,7 +29,8 @@ class WolfAPIServiceProvider extends ServiceProvider implements DeferrableProvid
             RequestMakeCommand::class,
             ModelMakeCommand::class,
             AutomapMakeCommand::class,
-            CRUDMakeCommand::class
+            CRUDMakeCommand::class,
+            TransformerMakeCommand::class
         ]);
 
         $this->app->extend('command.request.make', function () {

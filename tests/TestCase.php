@@ -4,7 +4,7 @@ namespace IgnitionWolf\API\Tests;
 
 use Flugg\Responder\ResponderServiceProvider;
 use IgnitionWolf\API\ExceptionServiceProvider;
-use IgnitionWolf\API\Tests\Concerns\HasGarbageCollection;
+use IgnitionWolf\API\Concerns\HasGarbageCollection;
 use IgnitionWolf\API\WolfAPIServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;

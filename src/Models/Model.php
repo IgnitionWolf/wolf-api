@@ -9,4 +9,11 @@ use Flugg\Responder\Contracts\Transformable;
 abstract class Model extends Eloquent implements Transformable
 {
     use HasFillableRelations;
+
+    public function transformer()
+    {
+        return function () {
+            return $this->toArray();
+        };
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace IgnitionWolf\API\Tests\Concerns;
+namespace IgnitionWolf\API\Concerns;
 
 trait HasGarbageCollection
 {

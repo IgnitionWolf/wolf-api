@@ -64,8 +64,8 @@ class Handler extends ExceptionHandler
             $data['statusCode'] = $exception->getStatusCode();
         } else {
             $data['message'] = $exception->getMessage();
-            $data['statusCode'] = !empty($exception->getCode())
-                                    ? $exception->getCode()
+            $data['statusCode'] = (!empty($code = $exception->getCode()) && ($code >= 400 && $code <= 600))
+                                    ? $code
                                     : Payload::$defaults[Payload::ARG_STATUS_CODE];
             $data['code'] = Payload::$defaults[Payload::ARG_IDENTIFIER];
         }

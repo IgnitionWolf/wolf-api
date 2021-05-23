@@ -4,6 +4,7 @@ namespace IgnitionWolf\API\Validator;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Container\Container;
+use Illuminate\Http\Request;
 
 class RequestValidator
 {
@@ -18,9 +19,9 @@ class RequestValidator
      *
      * @param string $entity the entity class namespace.
      * @param string $action request type (e.g. create, update, delete), or form request class namespace.
-     * @return FormRequest
+     * @return Request|FormRequest
      */
-    public function validate(string $entity, string $action): FormRequest
+    public function validate(string $entity, string $action)
     {
         if (class_exists($action)) {
             return app($action);
@@ -34,6 +35,8 @@ class RequestValidator
                 return app($option);
             }
         }
+
+        return request();
     }
 
     /**

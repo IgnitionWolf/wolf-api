@@ -3,7 +3,7 @@
 namespace IgnitionWolf\API\Concerns;
 
 use Exception;
-use Illuminate\Auth\Access\Gate;
+use Illuminate\Support\Facades\Gate;
 
 trait Bounces
 {
@@ -23,6 +23,6 @@ trait Bounces
             return false;
         }
 
-        return app(Gate::class)->allows($action, $entity);
+        return Gate::allows($action, $entity);
     }
 }

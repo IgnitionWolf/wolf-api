@@ -6,6 +6,8 @@ use Exception;
 
 class Stub
 {
+    protected string $path = __DIR__ . '/../Commands/stubs';
+
     /**
      * Generate a stub file and store it in a specific path, you can pass a set of parameters
      * that will be injected in the stub if necessary.
@@ -39,11 +41,22 @@ class Stub
     }
 
     /**
+     * Set the path to stubs directory.
+     * @param string $path
+     * @return Stub
+     */
+    public function setBasePath(string $path): Stub
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+    /**
      * Get the path to stubs directory.
      * @return string
      */
-    private function getBasePath(): string
+    public function getBasePath(): string
     {
-        return __DIR__ . '/../Commands/stubs';
+        return $this->path;
     }
 }

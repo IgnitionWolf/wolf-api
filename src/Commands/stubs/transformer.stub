@@ -1,0 +1,27 @@
+<?php
+
+namespace DummyNamespace;
+
+use Flugg\Responder\Transformers\Transformer;
+use Illuminate\Database\Eloquent\Model;
+
+class DummyClass extends Transformer
+{
+    /**
+     * A list of autoloaded default relations.
+     *
+     * @var array
+     */
+    protected $load = [];
+
+    /**
+     * Transform the model.
+     *
+     * @param Model $model
+     * @return array
+     */
+    public function transform(Model $model): array
+    {
+        return $model->toArray();
+    }
+}
