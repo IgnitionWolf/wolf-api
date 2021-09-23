@@ -21,9 +21,12 @@ class StoreMethodTest extends TestCase
 
         $response = $this->put('/dummy', [
             'name' => 'My Name',
+            'dummy_child' => [
+                'name' => 'My BelongsTo Child'
+            ],
             'dummy_children' => [
                 [
-                    'name' => 'My Child'
+                    'name' => 'My ToMany Child'
                 ]
             ],
             'dummy_poly' => [
@@ -39,10 +42,14 @@ class StoreMethodTest extends TestCase
             'data' => [
                 'id' => 1,
                 'name' => 'My Name',
+                'dummy_child' => [
+                    'id' => 1,
+                    'name' => 'My BelongsTo Child'
+                ],
                 'dummy_children' => [
                     [
-                        'id' => 1,
-                        'name' => 'My Child',
+                        'id' => 2,
+                        'name' => 'My ToMany Child',
                     ]
                 ],
                 'dummy_poly' => [

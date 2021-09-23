@@ -3,6 +3,7 @@
 namespace IgnitionWolf\API\Tests;
 
 use Flugg\Responder\ResponderServiceProvider;
+use IgnitionWolf\API\CommandServiceProvider;
 use IgnitionWolf\API\ExceptionServiceProvider;
 use IgnitionWolf\API\Concerns\HasGarbageCollection;
 use IgnitionWolf\API\WolfAPIServiceProvider;
@@ -38,6 +39,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             WolfAPIServiceProvider::class,
+            CommandServiceProvider::class,
             ExceptionServiceProvider::class,
             ResponderServiceProvider::class,
             QueryBuilderServiceProvider::class

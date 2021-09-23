@@ -68,6 +68,27 @@ class EntityRequest extends FormRequest
     }
 
     /**
+     * Helper function to obtain the entity object of a specific ID, which throws an exception if not found.
+     *
+     * @param int|null $id
+     * @return mixed
+     * @throws Exception
+     */
+    public function findOrFail(?int $id)
+    {
+        if (!static::$model) {
+            throw new Exception('Tried to call find() but the $model has not been assigned yet.');
+        }
+
+        $model = app()->make(static::$model);
+        if (!$model) {
+            throw new Exception('Failed to instantiate ' . static::$model);
+        }
+
+        return $model::findOrFail($id);
+    }
+
+    /**
      * Helper function to extract the ID parameter from the route.
      *
      * @return int|null

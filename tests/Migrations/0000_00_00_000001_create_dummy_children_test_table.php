@@ -17,7 +17,7 @@ class CreateDummyChildrenTestTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->unsignedInteger('age')->nullable();
-            $table->foreignId('dummy_id')->constrained();
+            $table->foreignIdFor(\IgnitionWolf\API\Tests\Dummy::class)->nullable();
             $table->timestamps();
         });
     }

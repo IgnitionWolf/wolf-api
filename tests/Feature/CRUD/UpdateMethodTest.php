@@ -18,13 +18,16 @@ class UpdateMethodTest extends TestCase
             ]);
         });
 
-        Dummy::create([
+        $dummy = Dummy::create([
             'name' => 'Old Name',
             'dummy_children' => [
                 ['name' => 'Old Child']
             ],
             'dummy_poly' => [
                 ['name' => 'Old Poly Child']
+            ],
+            'dummy_child' => [
+                'name' => 'Old Child'
             ]
         ]);
 
@@ -32,6 +35,9 @@ class UpdateMethodTest extends TestCase
 
         $response = $this->post('/dummy/1', [
             'name' => 'New Name',
+            'dummy_child' => [
+                'name' => 'New Child'
+            ],
             'dummy_children' => [
                 [
                     'name' => 'New Child'
@@ -41,7 +47,7 @@ class UpdateMethodTest extends TestCase
                 [
                     'name' => 'New Poly Child'
                 ]
-            ]
+            ],
         ]);
 
         $response->assertJsonFragment([
@@ -50,9 +56,13 @@ class UpdateMethodTest extends TestCase
             'data' => [
                 'id' => 1,
                 'name' => 'New Name',
+                'dummy_child' => [
+                    'id' => 3,
+                    'name' => 'New Child'
+                ],
                 'dummy_children' => [
                     [
-                        'id' => 2,
+                        'id' => 4,
                         'name' => 'New Child'
                     ]
                 ],
@@ -61,7 +71,7 @@ class UpdateMethodTest extends TestCase
                         'id' => 2,
                         'name' => 'New Poly Child'
                     ]
-                ]
+                ],
             ]
         ]);
     }

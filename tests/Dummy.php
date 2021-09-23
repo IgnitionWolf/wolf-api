@@ -2,6 +2,7 @@
 
 namespace IgnitionWolf\API\Tests;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use IgnitionWolf\API\Models\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -13,7 +14,12 @@ class Dummy extends Model
 {
     protected $fillable = ['name', 'age'];
 
-    protected $fillable_relations = ['dummy_children', 'dummy_poly'];
+    protected $fillable_relations = ['dummy_child', 'dummy_children', 'dummy_poly'];
+
+    public function dummyChild(): BelongsTo
+    {
+        return $this->belongsTo(DummyChild::class);
+    }
 
     public function dummyChildren(): HasMany
     {
@@ -28,6 +34,7 @@ class Dummy extends Model
     public function transformer(): \Closure
     {
         return function ($data) {
+            $child = $data->dummyChild;
             return [
                 'id' => $data->id,
                 'name' => $data->name,
@@ -36,7 +43,8 @@ class Dummy extends Model
                 }),
                 'dummy_poly' => $data->dummyPoly->map(function ($child) {
                     return $child->transformer()($child);
-                })
+                }),
+                'dummy_child' => $child ? $child->transformer()($child) : null
             ];
         };
     }

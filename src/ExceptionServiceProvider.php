@@ -21,6 +21,12 @@ class ExceptionServiceProvider extends ServiceProvider
             'Illuminate\Contracts\Debug\ExceptionHandler',
             'IgnitionWolf\API\Exceptions\Core\Handler'
         );
+
+        if (!app()->environment('production')) {
+            if ((int) request()->input('debug', 0) == 1) {
+                config(['app.debug' => true]);
+            }
+        }
     }
 
     /**
@@ -33,12 +39,6 @@ class ExceptionServiceProvider extends ServiceProvider
         $this->app->when(ExceptionBridge::class)
             ->needs('$exceptionBridgeMap')
             ->give($this->getBridgeMap());
-
-        if (!app()->environment('production')) {
-            if ((int) request()->input('debug', 0) == 1) {
-                config(['app.debug' => true]);
-            }
-        }
     }
 
     /**

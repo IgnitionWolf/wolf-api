@@ -11,7 +11,7 @@ use IgnitionWolf\API\Commands\TransformerMakeCommand;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
-class WolfAPIServiceProvider extends ServiceProvider implements DeferrableProvider
+class WolfAPIServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -24,23 +24,6 @@ class WolfAPIServiceProvider extends ServiceProvider implements DeferrableProvid
             ], 'config');
         }
 
-        $this->commands([
-            ControllerMakeCommand::class,
-            RequestMakeCommand::class,
-            ModelMakeCommand::class,
-            AutomapMakeCommand::class,
-            CRUDMakeCommand::class,
-            TransformerMakeCommand::class
-        ]);
-
-        $this->app->extend('command.request.make', function () {
-            return app(RequestMakeCommand::class);
-        });
-
-        $this->app->extend('command.controller.make', function () {
-            return app(ControllerMakeCommand::class);
-        });
-
         $this->loadTranslationsFrom(__DIR__.'/Resources/lang', 'api');
     }
 
@@ -52,17 +35,5 @@ class WolfAPIServiceProvider extends ServiceProvider implements DeferrableProvid
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api');
 
         $this->app->register(ExceptionServiceProvider::class);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function provides(): array
-    {
-        return [
-            'command.request.make',
-            'command.model.make',
-            'command.controller.make'
-        ];
     }
 }

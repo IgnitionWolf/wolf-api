@@ -2,7 +2,7 @@
 
 namespace IgnitionWolf\API\Models;
 
-use LaravelFillableRelations\Eloquent\Concerns\HasFillableRelations;
+use IgnitionWolf\FillableRelations\HasFillableRelations;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Flugg\Responder\Contracts\Transformable;
 

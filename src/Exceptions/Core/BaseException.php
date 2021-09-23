@@ -61,7 +61,7 @@ abstract class BaseException extends Exception
      * @return mixed
      * @throws Exception
      */
-    public function get(string $key): string
+    public function get(string $key): mixed
     {
         $bag = $this->getPayload();
         $value = $bag->first($key);

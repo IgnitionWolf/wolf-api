@@ -29,8 +29,8 @@ class IndexMethodTest extends TestCase
             'status' => 200,
             'success' => true,
             'data' => [
-                [ 'id' => 1, 'name' => 'First', 'dummy_children' => [], 'dummy_poly' => [] ],
-                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [] ],
+                [ 'id' => 1, 'name' => 'First', 'dummy_children' => [], 'dummy_poly' => [], 'dummy_child' => null ],
+                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [], 'dummy_child' => null ],
             ]
         ]);
     }
@@ -54,8 +54,8 @@ class IndexMethodTest extends TestCase
             'status' => 200,
             'success' => true,
             'data' => [
-                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [] ],
-                [ 'id' => 1, 'name' => 'First', 'dummy_children' => [], 'dummy_poly' => [] ],
+                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [], 'dummy_child' => null ],
+                [ 'id' => 1, 'name' => 'First', 'dummy_children' => [], 'dummy_poly' => [], 'dummy_child' => null ],
             ]
         ]);
 
@@ -81,7 +81,7 @@ class IndexMethodTest extends TestCase
             'status' => 200,
             'success' => true,
             'data' => [
-                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [] ],
+                [ 'id' => 2, 'name' => 'Second', 'dummy_children' => [], 'dummy_poly' => [], 'dummy_child' => null ],
             ]
         ]);
     }

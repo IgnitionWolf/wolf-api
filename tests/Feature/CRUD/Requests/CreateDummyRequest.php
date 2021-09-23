@@ -11,6 +11,7 @@ class CreateDummyRequest extends CreateEntityRequest
 
     public static array $rules = [
         'name' => 'string',
+        'dummy_child.name' => 'string',
         'dummy_children.*.name' => 'string',
         'dummy_poly.*.name' => 'string'
     ];

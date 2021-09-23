@@ -16,15 +16,15 @@
     ],
     "repositories": [{
         "type": "path",
-        "url": "/home/mauricio/projects/laravel-fillable-relations/",
+        "url": "/home/mauricio/projects/fillable-relations/",
         "symlink": true
     }],
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "ext-json": "*",
         "flugger/laravel-responder": "^3.1.2",
         "spatie/laravel-query-builder": "^3.3",
-        "troelskn/laravel-fillable-relations": "dev-master"
+        "ignitionwolf/fillable-relations": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17",
@@ -53,7 +53,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "IgnitionWolf\\API\\WolfAPIServiceProvider"
+                "IgnitionWolf\\API\\WolfAPIServiceProvider",
+                "IgnitionWolf\\API\\CommandServiceProvider"
             ]
         }
     },
