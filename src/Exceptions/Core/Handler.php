@@ -15,17 +15,8 @@ use Throwable;
  */
 class Handler extends ExceptionHandler
 {
-    /**
-     * Report or log an exception.
-     *
-     * @param Throwable $e
-     * @return void
-     * @throws Throwable
-     */
-    public function report(Throwable $e)
-    {
-        parent::report($e);
-    }
+    const DEFAULT_HTTP_CODE = 500;
+    const DEFAULT_PRETTY_CODE = 'INTERNAL_ERROR';
 
     /**
      * Render an exception into an HTTP response.
@@ -40,34 +31,36 @@ class Handler extends ExceptionHandler
         app(ExceptionBridge::class)->intercept($exception);
 
         $data = [
-            'statusCode' => null,
+            'httpCode' => self::DEFAULT_HTTP_CODE,
             'message' => null,
-            'code' => null,
+            'prettyCode' => self::DEFAULT_PRETTY_CODE,
             'meta' => null
         ];
 
         /**
          * Here we are looking at three different types of exceptions:
          * BaseException (this package's exception)
-         * HttpException (laravel's exception)
+         * HttpException (Laravel's exception)
          * Exception (PHP default exception)
          *
          * We'll prepare the data accordingly.
          */
         if ($exception instanceof BaseException) {
-            $data['message'] = $exception->get(Payload::ARG_MESSAGE);
-            $data['statusCode'] = $exception->get(Payload::ARG_STATUS_CODE);
-            $data['code'] = $exception->get(Payload::ARG_IDENTIFIER);
-            $data['meta'] = $exception->get(Payload::ARG_META);
+            $data['message'] = $exception->getMessage();
+            $data['httpCode'] = $exception->getCode();
+            $data['prettyCode'] = $exception->getPrettyCode();
+            $data['meta'] = $exception->getMeta();
         } elseif ($exception instanceof HttpException) {
             $data['message'] = $exception->getMessage();
-            $data['statusCode'] = $exception->getStatusCode();
+            $data['httpCode'] = $exception->getStatusCode() ?? $exception->getCode() ?? self::DEFAULT_HTTP_CODE;
+            $data['prettyCode'] = self::DEFAULT_PRETTY_CODE;
         } else {
             $data['message'] = $exception->getMessage();
-            $data['statusCode'] = (!empty($code = $exception->getCode()) && ($code >= 400 && $code <= 600))
-                                    ? $code
-                                    : Payload::$defaults[Payload::ARG_STATUS_CODE];
-            $data['code'] = Payload::$defaults[Payload::ARG_IDENTIFIER];
+            $data['prettyCode'] = self::DEFAULT_PRETTY_CODE;
+
+            if (($code = $exception->getCode()) && ($code >= 400 && $code <= 600)) {
+                $data['httpCode'] = $code;
+            }
         }
 
         /**
@@ -75,7 +68,7 @@ class Handler extends ExceptionHandler
          */
         if (!$exception instanceof BaseException) {
             if (app()->environment('production')) {
-                $data['message'] = Payload::$defaults[Payload::ARG_MESSAGE];
+                $data['message'] = trans('api::exceptions.default_error');
             }
 
             if (config('app.debug') === true) {
@@ -83,7 +76,7 @@ class Handler extends ExceptionHandler
             }
         }
 
-        $response = responder()->error($data['code'] ?? Payload::$defaults[Payload::ARG_IDENTIFIER], $data['message']);
+        $response = responder()->error($data['prettyCode'], $data['message']);
 
         /**
          * "meta" is the extra errors (such as validation errors)
@@ -93,6 +86,6 @@ class Handler extends ExceptionHandler
             $response->data($data['meta']);
         }
 
-        return $response->respond($data['statusCode'] ?? Payload::$defaults[Payload::ARG_STATUS_CODE]);
+        return $response->respond($data['httpCode']);
     }
 }

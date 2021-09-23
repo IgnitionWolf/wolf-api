@@ -3,19 +3,15 @@
 namespace IgnitionWolf\API\Exceptions;
 
 use IgnitionWolf\API\Exceptions\Core\BaseException;
-use IgnitionWolf\API\Exceptions\Core\ExceptionPayload;
 
 class NotAuthorizedException extends BaseException
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getPayload(): ExceptionPayload
+    public function __construct()
     {
-        return new ExceptionPayload([
-            ExceptionPayload::ARG_MESSAGE => trans('api::exceptions.not_authorized'),
-            ExceptionPayload::ARG_IDENTIFIER => 'NOT_AUTHORIZED',
-            ExceptionPayload::ARG_STATUS_CODE => 401
-        ]);
+        parent::__construct(
+            code: 401,
+            message: trans('api::exceptions.not_authorized'),
+            prettyCode: 'NOT_AUTHORIZED'
+        );
     }
 }
