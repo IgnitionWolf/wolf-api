@@ -9,8 +9,8 @@ class ValidationException extends BaseException
 {
     public function __construct(mixed $meta)
     {
-        if ($this->meta instanceof Validator) {
-            $this->meta = $this->meta->errors()->toArray();
+        if ($meta instanceof Validator) {
+            $meta = $meta->errors()->toArray();
         }
 
         parent::__construct(

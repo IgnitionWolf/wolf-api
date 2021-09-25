@@ -2,10 +2,10 @@
 
 namespace IgnitionWolf\API\Exceptions\Core;
 
+use RuntimeException;
 use Throwable;
-use Exception;
 
-abstract class BaseException extends Exception
+class BaseException extends RuntimeException
 {
     /**
      * Construct the exception object.

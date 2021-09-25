@@ -3,7 +3,6 @@
 namespace IgnitionWolf\API\Exceptions\Core;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use IgnitionWolf\API\Exceptions\Core\ExceptionPayload as Payload;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
@@ -32,8 +31,8 @@ class Handler extends ExceptionHandler
 
         $data = [
             'httpCode' => self::DEFAULT_HTTP_CODE,
-            'message' => null,
             'prettyCode' => self::DEFAULT_PRETTY_CODE,
+            'message' => null,
             'meta' => null
         ];
 
